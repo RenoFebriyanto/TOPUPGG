@@ -2,6 +2,22 @@ import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import Link from 'next/link'
 
+// Tipe manual untuk Order agar tidak bergantung pada Prisma generate
+type OrderStatus = 'PENDING' | 'PROCESSING' | 'SUCCESS' | 'FAILED'
+
+type Order = {
+  id: string
+  userId: string
+  game: string
+  productName: string
+  productCode: string
+  gameUserId: string
+  amount: number
+  status: OrderStatus
+  createdAt: Date
+  updatedAt: Date
+}
+
 async function getUserStats(userId: string) {
   const [totalOrders, successOrders, pendingOrders] = await Promise.all([
     prisma.order.count({ where: { userId } }),
@@ -54,7 +70,6 @@ function formatDate(date: Date) {
   }).format(new Date(date))
 }
 
-// Popular games untuk quick top up
 const POPULAR_GAMES = [
   { id: 'ml', name: 'Mobile Legends', icon: '⚔️', color: 'from-blue-600 to-blue-800', tag: 'MOBA' },
   { id: 'ff', name: 'Free Fire', icon: '🔥', color: 'from-orange-500 to-red-700', tag: 'Battle Royale' },
@@ -134,7 +149,6 @@ export default async function DashboardPage() {
           background: 'linear-gradient(135deg, rgba(14,165,233,0.08) 0%, rgba(99,102,241,0.06) 50%, rgba(8,12,20,0.9) 100%)',
         }}
       >
-        {/* Decorative glow */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -249,7 +263,7 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <div className="space-y-3">
-              {stats.recentOrders.map((order) => {
+              {stats.recentOrders.map((order: Order) => {
                 const status = STATUS_CONFIG[order.status as keyof typeof STATUS_CONFIG]
                 return (
                   <div

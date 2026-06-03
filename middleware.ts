@@ -6,15 +6,28 @@ export default auth((req) => {
   const session = req.auth
   const isLoggedIn = !!session
 
+  // Path auth sesuai struktur folder: app/auth/login & app/auth/register
   const isAuthRoute =
-    nextUrl.pathname.startsWith('/login') ||
-    nextUrl.pathname.startsWith('/register')
+    nextUrl.pathname.startsWith('/auth/login') ||
+    nextUrl.pathname.startsWith('/auth/register')
+
+  // Alias lama /login dan /register → redirect ke path baru
+  const isLegacyAuthRoute =
+    nextUrl.pathname === '/login' ||
+    nextUrl.pathname === '/register'
+
   const isDashboard = nextUrl.pathname.startsWith('/dashboard')
   const isAdminRoute = nextUrl.pathname.startsWith('/admin')
 
+  // Redirect path lama ke path baru
+  if (isLegacyAuthRoute) {
+    const newPath = nextUrl.pathname === '/login' ? '/auth/login' : '/auth/register'
+    return NextResponse.redirect(new URL(newPath, nextUrl))
+  }
+
   // Redirect ke login jika belum login dan akses dashboard/admin
   if ((isDashboard || isAdminRoute) && !isLoggedIn) {
-    const loginUrl = new URL('/login', nextUrl)
+    const loginUrl = new URL('/auth/login', nextUrl)
     loginUrl.searchParams.set('callbackUrl', nextUrl.pathname)
     return NextResponse.redirect(loginUrl)
   }
@@ -36,6 +49,9 @@ export const config = {
   matcher: [
     '/dashboard/:path*',
     '/admin/:path*',
+    '/auth/login',
+    '/auth/register',
+    // Tangkap alias lama juga
     '/login',
     '/register',
   ],

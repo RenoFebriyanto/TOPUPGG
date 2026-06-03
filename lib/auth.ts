@@ -5,7 +5,7 @@ import Google from 'next-auth/providers/google'
 import bcrypt from 'bcryptjs'
 import { prisma } from './db'
 
-// Role didefinisikan manual - JANGAN import dari @prisma/client
+// Role didefinisikan manual — JANGAN import dari @prisma/client
 // karena types baru tersedia SETELAH `npx prisma generate` dijalankan
 export type UserRole = 'USER' | 'ADMIN'
 
@@ -13,8 +13,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   pages: {
-    signIn: '/login',
-    error: '/login',
+    // Sesuai struktur folder: app/auth/login/page.tsx
+    signIn: '/auth/login',
+    error: '/auth/login',
   },
   providers: [
     Google({
