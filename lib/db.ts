@@ -1,13 +1,10 @@
 import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaClient } from '@prisma/client'
 import { Pool } from 'pg'
 
-// Prisma v7: PrismaClient di-export dari .prisma/client/default
-// yang baru ada SETELAH `npx prisma generate` dijalankan.
-// Solusi: gunakan dynamic import + ReturnType agar TypeScript tidak error
-// sebelum generate, sekaligus tetap fully type-safe setelah generate.
-
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { PrismaClient } = require('@prisma/client')
+// Prisma v7 dengan driver adapter (PrismaPg) tidak bisa menggunakan
+// import PrismaClient langsung dari generated path.
+// Solusi resmi: import dari '@prisma/client' dan inject adapter via constructor.
 
 function createPrismaClient() {
   const pool = new Pool({

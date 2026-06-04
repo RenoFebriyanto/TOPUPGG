@@ -252,7 +252,7 @@ export default function LoginPage() {
         <p className="text-center text-sm text-slate-400 mt-6">
           Belum punya akun?{' '}
           <Link
-            href="/register"
+            href="/auth/register"
             className="text-sky-400 hover:text-sky-300 font-medium transition-colors"
           >
             Daftar gratis
