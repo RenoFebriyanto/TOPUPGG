@@ -18,8 +18,17 @@ export default auth((req) => {
   const isDashboard = nextUrl.pathname.startsWith('/dashboard')
   const isAdminRoute = nextUrl.pathname.startsWith('/admin')
 
-  // Redirect path lama ke path baru
+  // PERBAIKAN: jika user sudah login dan membuka path legacy (/login atau
+  // /register), langsung arahkan ke /dashboard dalam satu kali redirect.
+  // Sebelumnya, path legacy selalu di-redirect ke /auth/login atau
+  // /auth/register dulu (mengabaikan status login), baru request berikutnya
+  // baru kena pengecekan "isAuthRoute && isLoggedIn" di bawah — sehingga
+  // user yang sudah login mengalami dua kali redirect berturut-turut
+  // (/login -> /auth/login -> /dashboard) alih-alih satu kali.
   if (isLegacyAuthRoute) {
+    if (isLoggedIn) {
+      return NextResponse.redirect(new URL('/dashboard', nextUrl))
+    }
     const newPath = nextUrl.pathname === '/login' ? '/auth/login' : '/auth/register'
     return NextResponse.redirect(new URL(newPath, nextUrl))
   }

@@ -38,13 +38,22 @@ function LoginForm() {
         redirect: false,
       })
 
-      if (result?.error) {
-        setError('Email atau password salah. Silakan coba lagi.')
+      // PERBAIKAN: sebelumnya hanya mengecek result?.error, sehingga jika
+      // signIn() gagal total (mis. network putus, result jadi undefined),
+      // kode lanjut ke router.push seolah-olah berhasil login. Sekarang
+      // wajib result.ok === true baru dianggap sukses; selain itu dianggap
+      // gagal dan menampilkan pesan yang sesuai.
+      if (result?.ok) {
+        router.push(callbackUrl)
+        router.refresh()
         return
       }
 
-      router.push(callbackUrl)
-      router.refresh()
+      if (result?.error) {
+        setError('Email atau password salah. Silakan coba lagi.')
+      } else {
+        setError('Tidak dapat terhubung ke server. Periksa koneksi Anda.')
+      }
     } catch {
       setError('Tidak dapat terhubung ke server. Periksa koneksi Anda.')
     } finally {
