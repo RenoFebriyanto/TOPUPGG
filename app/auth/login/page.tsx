@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard'
@@ -39,12 +39,10 @@ export default function LoginPage() {
       })
 
       if (result?.error) {
-        // NextAuth mengembalikan "CredentialsSignin" untuk login gagal
         setError('Email atau password salah. Silakan coba lagi.')
         return
       }
 
-      // Login berhasil — redirect ke callbackUrl atau dashboard
       router.push(callbackUrl)
       router.refresh()
     } catch {
@@ -94,7 +92,6 @@ export default function LoginPage() {
           backdropFilter: 'blur(20px)',
         }}
       >
-        {/* Pesan dari middleware (misal: sesi expired) */}
         {searchParams.get('error') === 'SessionRequired' && (
           <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm mb-5">
             <svg className="w-4 h-4 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -105,7 +102,6 @@ export default function LoginPage() {
         )}
 
         <form onSubmit={handleSubmit} noValidate className="space-y-5">
-          {/* Alert Error */}
           {error && (
             <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
               <svg className="w-4 h-4 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -115,7 +111,6 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Field Email */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
               Email
@@ -139,13 +134,11 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Field Password */}
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="block text-sm font-medium text-slate-300">
                 Password
               </label>
-              {/* Placeholder lupa password — bisa diaktifkan nanti */}
               <span className="text-xs text-slate-600 cursor-not-allowed select-none">
                 Lupa password?
               </span>
@@ -186,7 +179,6 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Tombol Login */}
           <button
             type="submit"
             disabled={loading || loadingGoogle}
@@ -212,14 +204,12 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Divider */}
         <div className="flex items-center gap-3 my-6">
           <div className="flex-1 h-px bg-slate-700/60" />
           <span className="text-slate-500 text-xs">atau lanjutkan dengan</span>
           <div className="flex-1 h-px bg-slate-700/60" />
         </div>
 
-        {/* Google Login */}
         <button
           type="button"
           onClick={handleGoogleLogin}
@@ -236,7 +226,6 @@ export default function LoginPage() {
             </>
           ) : (
             <>
-              {/* Google Icon */}
               <svg className="w-4 h-4" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -248,7 +237,6 @@ export default function LoginPage() {
           )}
         </button>
 
-        {/* Link ke Register */}
         <p className="text-center text-sm text-slate-400 mt-6">
           Belum punya akun?{' '}
           <Link
@@ -260,10 +248,17 @@ export default function LoginPage() {
         </p>
       </div>
 
-      {/* Footer note */}
       <p className="text-center text-xs text-slate-600 mt-6">
         Dengan login, kamu menyetujui syarat & ketentuan TopUpGG
       </p>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   )
 }
