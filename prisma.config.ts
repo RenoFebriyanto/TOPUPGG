@@ -4,9 +4,8 @@ import * as path from 'path'
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') })
 dotenv.config({ path: path.resolve(process.cwd(), '.env') })
-
 export default defineConfig({
   datasource: {
-    url: process.env.DIRECT_URL!,
+    url: process.env.DIRECT_URL!,  // pakai direct, bukan pooler
   },
 })
