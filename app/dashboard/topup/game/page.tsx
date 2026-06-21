@@ -1,0 +1,485 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { SUPPORTED_GAMES, type DigiflazzProduct } from '@/lib/digiflazz'
+
+type Step = 'select' | 'input' | 'confirm' | 'processing' | 'result'
+
+type OrderResult = {
+  id: string
+  productName: string
+  gameUserId: string
+  amount: number
+  status: 'SUCCESS' | 'FAILED' | 'PROCESSING'
+  createdAt: string
+  sn?: string | null
+}
+
+function formatCurrency(amount: number) {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+  }).format(amount)
+}
+
+export default function GameTopUpPage() {
+  const params = useParams()
+  const router = useRouter()
+  const gameKey = params.game as string
+  const gameInfo = SUPPORTED_GAMES[gameKey]
+
+  const [products, setProducts] = useState<DigiflazzProduct[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  const [step, setStep] = useState<Step>('select')
+  const [selectedProduct, setSelectedProduct] = useState<DigiflazzProduct | null>(null)
+  const [gameUserId, setGameUserId] = useState('')
+  const [serverId, setServerId] = useState('')
+  const [inputError, setInputError] = useState('')
+  const [orderResult, setOrderResult] = useState<OrderResult | null>(null)
+
+  const fetchProducts = useCallback(async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/digiflazz/products')
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Gagal memuat produk')
+      const gameProducts: DigiflazzProduct[] = data.data?.[gameKey] ?? []
+      setProducts(gameProducts)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Gagal memuat produk')
+    } finally {
+      setLoading(false)
+    }
+  }, [gameKey])
+
+  useEffect(() => {
+    if (!gameInfo) {
+      router.replace('/dashboard/topup')
+      return
+    }
+    fetchProducts()
+  }, [gameKey, gameInfo, fetchProducts, router])
+
+  function handleSelectProduct(product: DigiflazzProduct) {
+    setSelectedProduct(product)
+    setStep('input')
+    setInputError('')
+  }
+
+  function handleInputSubmit() {
+    setInputError('')
+    const trimmedId = gameUserId.trim()
+    if (!trimmedId) {
+      setInputError(`${gameInfo.userIdLabel} wajib diisi.`)
+      return
+    }
+    if (gameInfo.requireServer && !serverId.trim()) {
+      setInputError('Server ID wajib diisi.')
+      return
+    }
+    setStep('confirm')
+  }
+
+  async function handleConfirm() {
+    if (!selectedProduct) return
+    setStep('processing')
+
+    const customerNo = gameInfo.requireServer
+      ? `${gameUserId.trim()}(${serverId.trim()})`
+      : gameUserId.trim()
+
+    try {
+      const res = await fetch('/api/digiflazz/transaction', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          skuCode: selectedProduct.buyer_sku_code,
+          gameUserId: customerNo,
+          gameKey,
+        }),
+      })
+      const data = await res.json()
+
+      if (!res.ok) {
+        setOrderResult({
+          id: '-',
+          productName: selectedProduct.product_name,
+          gameUserId: customerNo,
+          amount: selectedProduct.price,
+          status: 'FAILED',
+          createdAt: new Date().toISOString(),
+          sn: null,
+        })
+        setStep('result')
+        return
+      }
+
+      setOrderResult({ ...data.order, sn: data.sn })
+      setStep('result')
+    } catch {
+      setOrderResult({
+        id: '-',
+        productName: selectedProduct.product_name,
+        gameUserId: customerNo,
+        amount: selectedProduct.price,
+        status: 'FAILED',
+        createdAt: new Date().toISOString(),
+        sn: null,
+      })
+      setStep('result')
+    }
+  }
+
+  function handleReset() {
+    setStep('select')
+    setSelectedProduct(null)
+    setGameUserId('')
+    setServerId('')
+    setInputError('')
+    setOrderResult(null)
+  }
+
+  // ── Render: invalid game ──────────────────────────────────────────────────
+  if (!gameInfo) return null
+
+  // ── Render: loading ───────────────────────────────────────────────────────
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-6">
+        <div className="h-8 w-48 rounded-xl bg-slate-800/60 animate-pulse" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-24 rounded-2xl bg-slate-800/60 animate-pulse" />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // ── Render: error ─────────────────────────────────────────────────────────
+  if (error) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <div className="rounded-2xl border border-red-500/20 p-8 text-center" style={{ background: 'rgba(15,20,35,0.8)' }}>
+          <p className="text-red-400 text-sm mb-4">{error}</p>
+          <button
+            onClick={fetchProducts}
+            className="px-4 py-2 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 text-sm hover:bg-sky-500/20 transition-colors"
+          >
+            Coba Lagi
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Render: result ────────────────────────────────────────────────────────
+  if (step === 'result' && orderResult) {
+    const isSuccess = orderResult.status === 'SUCCESS'
+    const isPending = orderResult.status === 'PROCESSING'
+
+    return (
+      <div className="max-w-md mx-auto">
+        <div className="rounded-2xl border border-slate-700/50 overflow-hidden" style={{ background: 'rgba(15,20,35,0.9)' }}>
+          {/* Status banner */}
+          <div className={`p-6 text-center ${isSuccess ? 'bg-emerald-500/10 border-b border-emerald-500/20' : isPending ? 'bg-amber-500/10 border-b border-amber-500/20' : 'bg-red-500/10 border-b border-red-500/20'}`}>
+            <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ${isSuccess ? 'bg-emerald-500/20' : isPending ? 'bg-amber-500/20' : 'bg-red-500/20'}`}>
+              {isSuccess ? (
+                <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              ) : isPending ? (
+                <svg className="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              ) : (
+                <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              )}
+            </div>
+            <h2 className={`text-lg font-bold ${isSuccess ? 'text-emerald-400' : isPending ? 'text-amber-400' : 'text-red-400'}`}>
+              {isSuccess ? 'Transaksi Berhasil!' : isPending ? 'Sedang Diproses' : 'Transaksi Gagal'}
+            </h2>
+            <p className={`text-xs mt-1 ${isSuccess ? 'text-emerald-400/70' : isPending ? 'text-amber-400/70' : 'text-red-400/70'}`}>
+              {isSuccess ? 'Diamond/item sudah masuk ke akunmu' : isPending ? 'Transaksi sedang diproses, cek riwayat untuk update' : 'Transaksi tidak berhasil diproses'}
+            </p>
+          </div>
+
+          {/* Detail */}
+          <div className="p-6 space-y-3">
+            {[
+              { label: 'Produk', value: orderResult.productName },
+              { label: 'Game ID', value: orderResult.gameUserId },
+              { label: 'Total', value: formatCurrency(orderResult.amount) },
+              ...(orderResult.sn ? [{ label: 'Serial Number', value: orderResult.sn }] : []),
+            ].map((item) => (
+              <div key={item.label} className="flex justify-between items-center py-2 border-b border-slate-800/60 last:border-0">
+                <span className="text-slate-400 text-sm">{item.label}</span>
+                <span className="text-white text-sm font-medium text-right max-w-[60%] break-all">{item.value}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div className="p-6 pt-0 flex gap-3">
+            <button
+              onClick={handleReset}
+              className="flex-1 py-3 rounded-xl text-sm font-semibold bg-sky-500/10 border border-sky-500/20 text-sky-400 hover:bg-sky-500/20 transition-colors"
+            >
+              Top Up Lagi
+            </button>
+            <Link
+              href="/dashboard/orders"
+              className="flex-1 py-3 rounded-xl text-sm font-semibold text-center bg-slate-800/60 border border-slate-700/50 text-slate-300 hover:bg-slate-800 transition-colors"
+            >
+              Lihat Riwayat
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Render: processing ────────────────────────────────────────────────────
+  if (step === 'processing') {
+    return (
+      <div className="max-w-md mx-auto">
+        <div className="rounded-2xl border border-slate-700/50 p-12 flex flex-col items-center text-center" style={{ background: 'rgba(15,20,35,0.9)' }}>
+          <div className="w-16 h-16 rounded-full bg-sky-500/10 border border-sky-500/20 flex items-center justify-center mb-4">
+            <svg className="animate-spin w-8 h-8 text-sky-400" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+          </div>
+          <h2 className="text-white font-bold text-lg">Memproses Transaksi</h2>
+          <p className="text-slate-400 text-sm mt-2">Mohon tunggu, jangan tutup halaman ini...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Render: confirm modal overlay ─────────────────────────────────────────
+  const customerNoDisplay = gameInfo.requireServer
+    ? `${gameUserId.trim()} (Server: ${serverId.trim()})`
+    : gameUserId.trim()
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-6">
+
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-2 text-sm">
+        <Link href="/dashboard/topup" className="text-slate-400 hover:text-white transition-colors">
+          Top Up
+        </Link>
+        <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+        <span className="text-white font-medium">{gameInfo.label}</span>
+      </div>
+
+      {/* Game header */}
+      <div
+        className="rounded-2xl border border-slate-700/50 p-6 flex items-center gap-4"
+        style={{ background: 'rgba(15,20,35,0.8)' }}
+      >
+        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${gameInfo.color} flex items-center justify-center text-2xl shrink-0`}>
+          {gameInfo.icon}
+        </div>
+        <div>
+          <h1 className="text-white font-bold text-xl">{gameInfo.label}</h1>
+          <span className="text-slate-400 text-sm">{gameInfo.tag}</span>
+        </div>
+      </div>
+
+      {/* Step: select nominal */}
+      {(step === 'select' || step === 'input' || step === 'confirm') && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-white font-semibold">
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold mr-2">1</span>
+              Pilih Nominal
+            </h2>
+            {step !== 'select' && (
+              <button onClick={() => { setStep('select'); setSelectedProduct(null) }} className="text-sky-400 text-sm hover:text-sky-300 transition-colors">
+                Ubah
+              </button>
+            )}
+          </div>
+
+          {products.length === 0 ? (
+            <div className="rounded-2xl border border-slate-700/50 p-8 text-center" style={{ background: 'rgba(15,20,35,0.8)' }}>
+              <p className="text-slate-400 text-sm">Tidak ada produk tersedia saat ini.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {products.map((product) => {
+                const isSelected = selectedProduct?.buyer_sku_code === product.buyer_sku_code
+                return (
+                  <button
+                    key={product.buyer_sku_code}
+                    onClick={() => step === 'select' && handleSelectProduct(product)}
+                    disabled={step !== 'select'}
+                    className={`relative rounded-2xl border p-4 text-left transition-all duration-150 ${
+                      isSelected
+                        ? 'border-sky-500/60 bg-sky-500/10'
+                        : step === 'select'
+                        ? 'border-slate-700/50 hover:border-slate-500/60 hover:bg-slate-800/40 cursor-pointer'
+                        : 'border-slate-800/40 opacity-40 cursor-default'
+                    }`}
+                    style={{ background: isSelected ? undefined : 'rgba(15,20,35,0.8)' }}
+                  >
+                    {isSelected && (
+                      <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-sky-500 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    )}
+                    <p className="text-white font-semibold text-sm leading-tight">{product.product_name}</p>
+                    <p className="text-sky-400 font-bold text-base mt-1">{formatCurrency(product.price)}</p>
+                  </button>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Step: input ID */}
+      {(step === 'input' || step === 'confirm') && selectedProduct && (
+        <div
+          className="rounded-2xl border border-slate-700/50 p-6 space-y-4"
+          style={{ background: 'rgba(15,20,35,0.8)' }}
+        >
+          <div className="flex items-center justify-between">
+            <h2 className="text-white font-semibold">
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold mr-2">2</span>
+              Masukkan {gameInfo.userIdLabel}
+            </h2>
+            {step === 'confirm' && (
+              <button onClick={() => setStep('input')} className="text-sky-400 text-sm hover:text-sky-300 transition-colors">
+                Ubah
+              </button>
+            )}
+          </div>
+
+          {step === 'input' ? (
+            <div className="space-y-4">
+              {/* User ID input */}
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  {gameInfo.userIdLabel}
+                </label>
+                <input
+                  type="text"
+                  value={gameUserId}
+                  onChange={(e) => { setGameUserId(e.target.value); setInputError('') }}
+                  placeholder={gameInfo.userIdPlaceholder}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-800/60 border border-slate-600/50 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 transition-all"
+                />
+              </div>
+
+              {/* Server ID (ML only) */}
+              {gameInfo.requireServer && (
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                    Server ID
+                  </label>
+                  <input
+                    type="text"
+                    value={serverId}
+                    onChange={(e) => { setServerId(e.target.value); setInputError('') }}
+                    placeholder="1234"
+                    className="w-full px-4 py-3 rounded-xl bg-slate-800/60 border border-slate-600/50 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50 transition-all"
+                  />
+                </div>
+              )}
+
+              {/* Hint */}
+              <p className="text-slate-500 text-xs flex items-start gap-1.5">
+                <svg className="w-3.5 h-3.5 mt-0.5 shrink-0 text-slate-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+                {gameInfo.userIdHint}
+              </p>
+
+              {/* Error */}
+              {inputError && (
+                <p className="text-red-400 text-sm">{inputError}</p>
+              )}
+
+              {/* Submit */}
+              <button
+                onClick={handleInputSubmit}
+                className="w-full py-3 rounded-xl font-semibold text-sm text-white transition-all"
+                style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: '0 0 20px rgba(14,165,233,0.3)' }}
+              >
+                Lanjutkan
+              </button>
+            </div>
+          ) : (
+            // Confirm view — tampil ringkasan ID
+            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-800/60 border border-slate-700/30">
+              <svg className="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span className="text-white text-sm">{customerNoDisplay}</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Step: confirm order */}
+      {step === 'confirm' && selectedProduct && (
+        <div
+          className="rounded-2xl border border-slate-700/50 p-6 space-y-4"
+          style={{ background: 'rgba(15,20,35,0.8)' }}
+        >
+          <h2 className="text-white font-semibold">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold mr-2">3</span>
+            Konfirmasi Pesanan
+          </h2>
+
+          {/* Order summary */}
+          <div className="rounded-xl border border-slate-700/40 overflow-hidden">
+            {[
+              { label: 'Game', value: gameInfo.label },
+              { label: 'Produk', value: selectedProduct.product_name },
+              { label: gameInfo.userIdLabel, value: customerNoDisplay },
+              { label: 'Total Bayar', value: formatCurrency(selectedProduct.price), highlight: true },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className={`flex justify-between items-center px-4 py-3 border-b border-slate-800/60 last:border-0 ${item.highlight ? 'bg-sky-500/5' : ''}`}
+              >
+                <span className="text-slate-400 text-sm">{item.label}</span>
+                <span className={`text-sm font-semibold ${item.highlight ? 'text-sky-400 text-base' : 'text-white'}`}>
+                  {item.value}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-slate-500 text-xs">
+            Pastikan ID yang kamu masukkan sudah benar. Transaksi yang sudah diproses tidak dapat dibatalkan.
+          </p>
+
+          <button
+            onClick={handleConfirm}
+            className="w-full py-3.5 rounded-xl font-semibold text-sm text-white transition-all"
+            style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: '0 0 20px rgba(14,165,233,0.3)' }}
+          >
+            Bayar {formatCurrency(selectedProduct.price)}
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}

@@ -6,7 +6,6 @@ export default auth((req) => {
   const session = req.auth
   const isLoggedIn = !!session
 
-  // Path auth sesuai struktur folder: app/auth/login & app/auth/register
   const isAuthRoute =
     nextUrl.pathname.startsWith('/auth/login') ||
     nextUrl.pathname.startsWith('/auth/register')
@@ -51,7 +50,6 @@ export const config = {
     '/admin/:path*',
     '/auth/login',
     '/auth/register',
-    // Tangkap alias lama juga
     '/login',
     '/register',
   ],
