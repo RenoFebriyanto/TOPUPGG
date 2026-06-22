@@ -9,7 +9,9 @@
     "lint": "eslint",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "digiflazz:test": "npx tsx scripts/test-digiflazz.ts",
+    "set:admin": "npx tsx scripts/set-admin.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",

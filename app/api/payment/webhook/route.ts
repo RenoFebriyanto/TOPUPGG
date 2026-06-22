@@ -68,10 +68,13 @@ export async function POST(req: NextRequest) {
       // Proses transaksi ke Digiflazz
       try {
         const refId = `${order_id}-${Date.now()}`
+        // Kirim cb_url agar Digiflazz bisa callback ke endpoint webhook kita
+        const appUrl = process.env.AUTH_URL ?? process.env.NEXTAUTH_URL ?? ''
         const txResult = await createTransaction({
           skuCode: order.productCode,
           customerNo: order.gameUserId,
           refId,
+          callbackUrl: appUrl ? `${appUrl}/api/digiflazz/webhook` : undefined,
         })
 
         const statusMap: Record<string, 'SUCCESS' | 'FAILED' | 'PROCESSING'> = {

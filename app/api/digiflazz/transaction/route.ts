@@ -60,10 +60,12 @@ export async function POST(req: NextRequest) {
     // Proses transaksi ke Digiflazz
     let txResult
     try {
+      const appUrl = process.env.AUTH_URL ?? process.env.NEXTAUTH_URL ?? ''
       txResult = await createTransaction({
         skuCode,
         customerNo: gameUserId,
         refId,
+        callbackUrl: appUrl ? `${appUrl}/api/digiflazz/webhook` : undefined,
       })
     } catch {
       // Jika Digiflazz error, update order ke FAILED

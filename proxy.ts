@@ -1,42 +1,96 @@
 import { auth } from '@/lib/auth'
 import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
+// ── Rate limiting (in-memory, per edge instance) ─────────────────────────────
+const rateLimitMap = new Map<string, { count: number; reset: number }>()
+
+function rateLimit(key: string, limit: number, windowMs: number): boolean {
+  const now = Date.now()
+  const entry = rateLimitMap.get(key)
+  if (!entry || now > entry.reset) {
+    rateLimitMap.set(key, { count: 1, reset: now + windowMs })
+    return true
+  }
+  if (entry.count >= limit) return false
+  entry.count++
+  return true
+}
+
+// Bersihkan entri kedaluwarsa setiap 5 menit
+setInterval(() => {
+  const now = Date.now()
+  for (const [k, v] of rateLimitMap.entries()) {
+    if (now > v.reset) rateLimitMap.delete(k)
+  }
+}, 5 * 60 * 1000)
+
+// ── Proxy handler ─────────────────────────────────────────────────────────────
 export default auth((req) => {
   const { nextUrl } = req
   const session = req.auth
   const isLoggedIn = !!session
+  const pathname = nextUrl.pathname
 
+  const ip =
+    (req as NextRequest).headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    (req as NextRequest).headers.get('x-real-ip') ??
+    '127.0.0.1'
+
+  // ── Rate limiting ───────────────────────────────────────────────────────────
+  // Login: max 10 req/menit per IP
+  if (pathname === '/api/auth/callback/credentials' || pathname === '/api/auth/signin') {
+    if (!rateLimit(`login:${ip}`, 10, 60_000)) {
+      return NextResponse.json(
+        { error: 'Terlalu banyak percobaan login. Coba lagi dalam 1 menit.' },
+        { status: 429 }
+      )
+    }
+  }
+
+  // Register: max 5 req/menit per IP
+  if (pathname === '/api/auth/register') {
+    if (!rateLimit(`register:${ip}`, 5, 60_000)) {
+      return NextResponse.json(
+        { error: 'Terlalu banyak percobaan registrasi. Coba lagi dalam 1 menit.' },
+        { status: 429 }
+      )
+    }
+  }
+
+  // API payment & transaksi: max 30 req/menit per IP
+  if (pathname.startsWith('/api/payment') || pathname.startsWith('/api/digiflazz/transaction')) {
+    if (!rateLimit(`api:${ip}`, 30, 60_000)) {
+      return NextResponse.json(
+        { error: 'Terlalu banyak request. Coba lagi nanti.' },
+        { status: 429 }
+      )
+    }
+  }
+
+  // ── Route protection ────────────────────────────────────────────────────────
   const isAuthRoute =
-    nextUrl.pathname.startsWith('/auth/login') ||
-    nextUrl.pathname.startsWith('/auth/register')
+    pathname.startsWith('/auth/login') ||
+    pathname.startsWith('/auth/register')
 
   // Alias lama /login dan /register → redirect ke path baru
   const isLegacyAuthRoute =
-    nextUrl.pathname === '/login' ||
-    nextUrl.pathname === '/register'
+    pathname === '/login' || pathname === '/register'
 
-  const isDashboard = nextUrl.pathname.startsWith('/dashboard')
-  const isAdminRoute = nextUrl.pathname.startsWith('/admin')
+  const isDashboard = pathname.startsWith('/dashboard')
+  const isAdminRoute = pathname.startsWith('/admin')
 
-  // PERBAIKAN: jika user sudah login dan membuka path legacy (/login atau
-  // /register), langsung arahkan ke /dashboard dalam satu kali redirect.
-  // Sebelumnya, path legacy selalu di-redirect ke /auth/login atau
-  // /auth/register dulu (mengabaikan status login), baru request berikutnya
-  // baru kena pengecekan "isAuthRoute && isLoggedIn" di bawah — sehingga
-  // user yang sudah login mengalami dua kali redirect berturut-turut
-  // (/login -> /auth/login -> /dashboard) alih-alih satu kali.
+  // Path legacy: satu kali redirect langsung
   if (isLegacyAuthRoute) {
-    if (isLoggedIn) {
-      return NextResponse.redirect(new URL('/dashboard', nextUrl))
-    }
-    const newPath = nextUrl.pathname === '/login' ? '/auth/login' : '/auth/register'
+    if (isLoggedIn) return NextResponse.redirect(new URL('/dashboard', nextUrl))
+    const newPath = pathname === '/login' ? '/auth/login' : '/auth/register'
     return NextResponse.redirect(new URL(newPath, nextUrl))
   }
 
   // Redirect ke login jika belum login dan akses dashboard/admin
   if ((isDashboard || isAdminRoute) && !isLoggedIn) {
     const loginUrl = new URL('/auth/login', nextUrl)
-    loginUrl.searchParams.set('callbackUrl', nextUrl.pathname)
+    loginUrl.searchParams.set('callbackUrl', pathname)
     return NextResponse.redirect(loginUrl)
   }
 
@@ -61,5 +115,10 @@ export const config = {
     '/auth/register',
     '/login',
     '/register',
+    '/api/auth/callback/credentials',
+    '/api/auth/signin',
+    '/api/auth/register',
+    '/api/payment/:path*',
+    '/api/digiflazz/transaction',
   ],
 }
