@@ -67,7 +67,7 @@ export default function RegisterPage() {
       }
 
       setSuccess('Akun berhasil dibuat! Mengarahkan ke halaman login...')
-      setTimeout(() => router.push('/login'), 2000)
+      setTimeout(() => router.push('/auth/login'), 2000)
     } catch {
       setError('Tidak dapat terhubung ke server. Periksa koneksi Anda.')
     } finally {
@@ -327,7 +327,7 @@ export default function RegisterPage() {
         <p className="text-center text-sm text-slate-400">
           Sudah punya akun?{' '}
           <Link
-            href="/login"
+            href="/auth/login"
             className="text-sky-400 hover:text-sky-300 font-medium transition-colors"
           >
             Login sekarang
