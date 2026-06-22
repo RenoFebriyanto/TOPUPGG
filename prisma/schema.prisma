@@ -4,8 +4,6 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -50,19 +48,22 @@ model Session {
 }
 
 model Order {
-  id          String      @id @default(cuid())
-  userId      String
-  game        String
-  productName String
-  productCode String
-  gameUserId  String
-  amount      Int
-  status      OrderStatus @default(PENDING)
-  digiflazzRef String?
-  sn          String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  user        User        @relation(fields: [userId], references: [id])
+  id            String      @id @default(cuid())
+  userId        String
+  game          String
+  productName   String
+  productCode   String
+  gameUserId    String
+  amount        Int
+  status        OrderStatus @default(PENDING)
+  paymentStatus PaymentStatus @default(UNPAID)
+  paymentToken  String?
+  paymentUrl    String?
+  digiflazzRef  String?
+  sn            String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  user          User        @relation(fields: [userId], references: [id])
 }
 
 enum Role {
@@ -75,4 +76,11 @@ enum OrderStatus {
   PROCESSING
   SUCCESS
   FAILED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  EXPIRED
+  REFUNDED
 }

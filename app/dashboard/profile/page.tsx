@@ -1,23 +1,132 @@
-export default function ProfilePage() {
+import { auth } from '@/lib/auth'
+import { prisma } from '@/lib/db'
+import Image from 'next/image'
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric', month: 'long', year: 'numeric',
+  }).format(new Date(date))
+}
+
+function formatCurrency(amount: number) {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency', currency: 'IDR', minimumFractionDigits: 0,
+  }).format(amount)
+}
+
+export default async function ProfilePage() {
+  const session = await auth()
+  const user = session!.user
+
+  const [totalOrders, successOrders, totalSpentResult, memberSince] = await Promise.all([
+    prisma.order.count({ where: { userId: user.id } }),
+    prisma.order.count({ where: { userId: user.id, status: 'SUCCESS' } }),
+    prisma.order.aggregate({
+      where: { userId: user.id, status: 'SUCCESS' },
+      _sum: { amount: true },
+    }),
+    prisma.user.findUnique({
+      where: { id: user.id },
+      select: { createdAt: true },
+    }),
+  ])
+
+  const totalSpent = totalSpentResult._sum.amount ?? 0
+  const successRate = totalOrders > 0 ? Math.round((successOrders / totalOrders) * 100) : 0
+
+  const stats = [
+    { label: 'Total Transaksi', value: String(totalOrders), icon: '📋' },
+    { label: 'Berhasil', value: String(successOrders), icon: '✅' },
+    { label: 'Success Rate', value: `${successRate}%`, icon: '📈' },
+    { label: 'Total Pengeluaran', value: formatCurrency(totalSpent), icon: '💰' },
+  ]
+
   return (
-    <div className="max-w-7xl mx-auto">
-      <div
-        className="rounded-2xl border border-slate-700/50 p-12 flex flex-col items-center justify-center text-center"
-        style={{ background: 'rgba(15,20,35,0.8)', minHeight: '400px' }}
-      >
-        <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6">
-          <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-        </div>
-        <h1 className="text-2xl font-bold text-white mb-2">Profil Saya</h1>
-        <p className="text-slate-400 text-sm max-w-sm">
-          Halaman profil sedang dalam pengembangan. Kamu akan bisa mengatur informasi akun, keamanan, dan preferensi di sini.
-        </p>
-        <div className="mt-6 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-          <span className="text-emerald-400 text-xs font-medium">🚧 Coming Soon — Fase 4</span>
+    <div className="max-w-3xl mx-auto space-y-6">
+
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold text-white">Profil Saya</h1>
+        <p className="text-slate-400 text-sm mt-1">Informasi akun dan statistik transaksi kamu</p>
+      </div>
+
+      {/* Profile card */}
+      <div className="rounded-2xl border border-slate-700/50 p-6" style={{ background: 'rgba(15,20,35,0.8)' }}>
+        <div className="flex items-center gap-5">
+          <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-700 shrink-0 flex items-center justify-center">
+            {user.image ? (
+              <Image src={user.image} alt={user.name ?? ''} width={80} height={80} className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-white text-3xl font-bold">
+                {user.name?.charAt(0).toUpperCase() ?? '?'}
+              </span>
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-white font-bold text-xl">{user.name ?? 'Pengguna'}</h2>
+              {user.role === 'ADMIN' && (
+                <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-violet-500/20 border border-violet-500/30 text-violet-400">
+                  Admin
+                </span>
+              )}
+            </div>
+            <p className="text-slate-400 text-sm mt-1">{user.email}</p>
+            {memberSince && (
+              <p className="text-slate-600 text-xs mt-1.5">
+                Member sejak {formatDate(memberSince.createdAt)}
+              </p>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Stats grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {stats.map((s) => (
+          <div key={s.label} className="rounded-2xl border border-slate-700/50 p-4 text-center" style={{ background: 'rgba(15,20,35,0.8)' }}>
+            <div className="text-2xl mb-2">{s.icon}</div>
+            <p className="text-white font-bold text-lg leading-tight">{s.value}</p>
+            <p className="text-slate-500 text-xs mt-1">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Account info */}
+      <div className="rounded-2xl border border-slate-700/50 overflow-hidden" style={{ background: 'rgba(15,20,35,0.8)' }}>
+        <div className="px-6 py-4 border-b border-slate-800/60">
+          <h3 className="text-white font-semibold">Informasi Akun</h3>
+        </div>
+        <div className="divide-y divide-slate-800/60">
+          {[
+            { label: 'Nama Lengkap', value: user.name ?? '-' },
+            { label: 'Email', value: user.email ?? '-' },
+            { label: 'Role', value: user.role === 'ADMIN' ? 'Administrator' : 'User' },
+            { label: 'Status Akun', value: 'Aktif' },
+          ].map((item) => (
+            <div key={item.label} className="flex justify-between items-center px-6 py-4">
+              <span className="text-slate-400 text-sm">{item.label}</span>
+              <span className="text-white text-sm font-medium">{item.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Security note */}
+      <div className="rounded-2xl border border-amber-500/20 p-5 flex items-start gap-4" style={{ background: 'rgba(15,20,35,0.6)' }}>
+        <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+          <svg className="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+        <div>
+          <p className="text-amber-400 text-sm font-medium">Keamanan Akun</p>
+          <p className="text-slate-400 text-xs mt-1">
+            Fitur ubah password dan pengaturan keamanan lanjutan akan tersedia segera. Jaga kerahasiaan akun kamu.
+          </p>
+        </div>
+      </div>
+
     </div>
   )
 }

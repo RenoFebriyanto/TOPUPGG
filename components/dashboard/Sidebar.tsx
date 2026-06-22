@@ -155,7 +155,7 @@ export default function DashboardSidebar({ user }: { user: User }) {
               <p className="text-slate-500 text-xs truncate">{user.email}</p>
             </div>
             <button
-              onClick={() => signOut({ callbackUrl: '/login' })}
+              onClick={() => signOut({ callbackUrl: '/auth/login' })}
               className="text-slate-500 hover:text-red-400 transition-colors shrink-0"
               title="Logout"
             >

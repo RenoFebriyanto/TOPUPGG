@@ -53,6 +53,7 @@ export async function POST(req: NextRequest) {
         gameUserId,
         amount: product.price,
         status: 'PENDING',
+        paymentStatus: 'PAID', // direct transaction = sudah bayar (sandbox)
       },
     })
 
@@ -68,7 +69,7 @@ export async function POST(req: NextRequest) {
       // Jika Digiflazz error, update order ke FAILED
       await prisma.order.update({
         where: { id: order.id },
-        data: { status: 'FAILED' },
+        data: { status: 'FAILED', paymentStatus: 'PAID' },
       })
       return NextResponse.json(
         { error: 'Transaksi gagal diproses. Coba lagi.' },
@@ -87,7 +88,7 @@ export async function POST(req: NextRequest) {
     // Update order dengan status final
     const updatedOrder = await prisma.order.update({
       where: { id: order.id },
-      data: { status: finalStatus },
+      data: { status: finalStatus, digiflazzRef: refId, sn: txResult.sn || null },
     })
 
     return NextResponse.json({

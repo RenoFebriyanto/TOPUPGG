@@ -14,6 +14,7 @@ type Order = {
   gameUserId: string
   amount: number
   status: OrderStatus
+  paymentStatus: string
   createdAt: Date
   updatedAt: Date
 }
