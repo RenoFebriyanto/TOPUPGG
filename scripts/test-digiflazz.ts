@@ -24,8 +24,8 @@ console.log(`API Key  : ${API_KEY.substring(0, 10)}...`)
 // ── 1. Cek Saldo ─────────────────────────────────────────────────────────────
 async function cekSaldo() {
   console.log('\n[1] Cek Saldo...')
-  // Format signature untuk cek saldo: MD5(username + apikey + "depo")
   const sign = crypto.createHash('md5').update(USERNAME + API_KEY + 'depo').digest('hex')
+  const res = await fetch(`${BASE_URL}/cek-saldo`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ cmd: 'deposit', username: USERNAME, sign }),
