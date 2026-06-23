@@ -1,4 +1,4 @@
-import { getProducts, groupProductsByGame, SUPPORTED_GAMES, IS_STAGING } from '@/lib/digiflazz'
+import { getProducts, groupProductsByGame, SUPPORTED_GAMES } from '@/lib/digiflazz'
 import GameIcon from '@/components/ui/GameIcon'
 
 function formatCurrency(n: number) {
@@ -25,15 +25,10 @@ export default async function AdminProductsPage() {
           <h1 className="text-2xl font-bold text-white">Daftar Produk</h1>
           <p className="text-slate-400 text-sm mt-1">
             {totalActive} produk aktif dari {products.length} total
-            {IS_STAGING && <span className="ml-2 text-amber-400 text-xs">(Staging Mode)</span>}
           </p>
         </div>
-        <div className={`px-3 py-1.5 rounded-full text-xs font-medium border ${
-          IS_STAGING
-            ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
-            : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-        }`}>
-          {IS_STAGING ? '🧪 Staging' : '🟢 Production'}
+        <div className="px-3 py-1.5 rounded-full text-xs font-medium border bg-emerald-500/10 border-emerald-500/20 text-emerald-400">
+          Production
         </div>
       </div>
 

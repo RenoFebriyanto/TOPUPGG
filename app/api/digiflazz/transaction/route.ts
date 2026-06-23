@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
         gameUserId,
         amount: product.price,
         status: 'PENDING',
-        paymentStatus: 'PAID', // direct transaction = sudah bayar (sandbox)
+        paymentStatus: 'PAID',
       },
     })
 

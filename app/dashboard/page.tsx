@@ -306,9 +306,9 @@ export default async function DashboardPage() {
           </svg>
         </div>
         <div>
-          <p className="text-white text-sm font-medium">Mode Development (Sandbox)</p>
+          <p className="text-white text-sm font-medium">Proses Instan</p>
           <p className="text-slate-400 text-xs mt-1">
-            Platform ini sedang dalam tahap pengembangan. Semua transaksi menggunakan mode sandbox — tidak ada uang nyata yang terlibat.
+            Setelah pembayaran dikonfirmasi, item akan otomatis masuk ke akun game kamu dalam hitungan detik.
           </p>
         </div>
       </div>
