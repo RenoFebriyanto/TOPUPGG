@@ -3,11 +3,17 @@ import { auth } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import DashboardSidebar from '@/components/dashboard/Sidebar'
 import DashboardHeader from '@/components/dashboard/Header'
+import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
   description: 'Dashboard pengguna ThreeTop',
 }
+
+// Midtrans Snap.js URL — production vs sandbox
+const SNAP_URL = process.env.MIDTRANS_IS_PRODUCTION === 'true'
+  ? 'https://app.midtrans.com/snap/snap.js'
+  : 'https://app.sandbox.midtrans.com/snap/snap.js'
 
 export default async function DashboardLayout({
   children,
@@ -22,6 +28,13 @@ export default async function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-[#080C14] flex">
+      {/* Midtrans Snap.js — load sekali untuk semua halaman dashboard */}
+      <Script
+        src={SNAP_URL}
+        data-client-key={process.env.MIDTRANS_CLIENT_KEY ?? ''}
+        strategy="lazyOnload"
+      />
+
       {/* Sidebar */}
       <DashboardSidebar user={session.user} />
 

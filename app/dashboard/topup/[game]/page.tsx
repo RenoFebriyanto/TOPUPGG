@@ -5,8 +5,9 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { SUPPORTED_GAMES, type DigiflazzProduct } from '@/lib/digiflazz'
 import GameIcon from '@/components/ui/GameIcon'
+import { openSnapPayment } from '@/components/ui/SnapPayment'
 
-type Step = 'select' | 'input' | 'confirm' | 'payment' | 'waiting' | 'result'
+type Step = 'select' | 'input' | 'confirm' | 'processing' | 'result'
 
 type OrderResult = {
   id: string
@@ -59,7 +60,6 @@ export default function GameTopUpPage() {
   const [serverId, setServerId] = useState('')
   const [inputError, setInputError] = useState('')
   const [orderResult, setOrderResult] = useState<OrderResult | null>(null)
-  const [paymentUrl, setPaymentUrl] = useState('')
   const [currentOrderId, setCurrentOrderId] = useState('')
   const [creating, setCreating] = useState(false)
   // Nickname auto-check
@@ -127,26 +127,69 @@ export default function GameTopUpPage() {
     setCreating(true)
     const customerNo = gameInfo.requireServer ? `${gameUserId.trim()}(${serverId.trim()})` : gameUserId.trim()
     try {
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? ''
       const res = await fetch('/api/payment/create', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ skuCode: selectedProduct.buyer_sku_code, gameUserId: customerNo, gameKey }),
       })
       const data = await res.json()
       if (!res.ok) { setInputError(data.error || 'Gagal membuat pembayaran.'); setStep('confirm'); setCreating(false); return }
-      setCurrentOrderId(data.orderId); setPaymentUrl(data.paymentUrl); setCreating(false); setStep('payment')
-    } catch { setInputError('Tidak dapat terhubung ke server.'); setStep('confirm'); setCreating(false) }
-  }
 
-  function handleOpenPayment() {
-    window.open(paymentUrl, '_blank', 'noopener,noreferrer')
-    setStep('waiting')
-    pollOrderStatus(currentOrderId, (result) => { setOrderResult(result); setStep('result') })
+      setCurrentOrderId(data.orderId)
+      setCreating(false)
+      setStep('processing')
+
+      // Buka Snap popup langsung di halaman ThreeTop
+      await openSnapPayment(data.snapToken, data.orderId, (snapStatus) => {
+        if (snapStatus === 'SUCCESS') {
+          // Langsung set result sukses
+          setOrderResult({
+            id: data.orderId,
+            productName: selectedProduct.product_name,
+            gameUserId: customerNo,
+            amount: selectedProduct.price,
+            status: 'PROCESSING', // akan diupdate via polling
+          })
+          setStep('result')
+          // Polling untuk update status final dari Digiflazz
+          pollOrderStatus(data.orderId, (result) => {
+            setOrderResult(result)
+          })
+        } else if (snapStatus === 'PENDING') {
+          setOrderResult({
+            id: data.orderId,
+            productName: selectedProduct.product_name,
+            gameUserId: customerNo,
+            amount: selectedProduct.price,
+            status: 'PROCESSING',
+          })
+          setStep('result')
+          pollOrderStatus(data.orderId, (result) => {
+            setOrderResult(result)
+          })
+        } else if (snapStatus === 'FAILED') {
+          setOrderResult({
+            id: data.orderId,
+            productName: selectedProduct.product_name,
+            gameUserId: customerNo,
+            amount: selectedProduct.price,
+            status: 'FAILED',
+          })
+          setStep('result')
+        } else if (snapStatus === 'CLOSED') {
+          // User tutup popup — kembali ke konfirmasi
+          setStep('confirm')
+        }
+      })
+    } catch (err) {
+      setInputError(err instanceof Error ? err.message : 'Terjadi kesalahan. Coba lagi.')
+      setStep('confirm')
+      setCreating(false)
+    }
   }
 
   function handleReset() {
     setStep('select'); setSelectedProduct(null); setGameUserId(''); setServerId('')
-    setInputError(''); setOrderResult(null); setPaymentUrl(''); setCurrentOrderId('')
+    setInputError(''); setOrderResult(null); setCurrentOrderId('')
     resetNick()
   }
 
@@ -208,18 +251,22 @@ export default function GameTopUpPage() {
     )
   }
 
-  // Waiting screen
-  if (step === 'waiting') {
+  // Processing screen — snap popup sedang terbuka
+  if (step === 'processing') {
     return (
       <div className="max-w-md mx-auto">
         <div className="rounded-2xl border border-slate-700/50 p-12 flex flex-col items-center text-center" style={{ background: 'rgba(15,20,35,0.9)' }}>
           <div className="w-16 h-16 rounded-full bg-sky-500/10 border border-sky-500/20 flex items-center justify-center mb-4">
-            <svg className="animate-spin w-8 h-8 text-sky-400" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+            <svg className="animate-spin w-8 h-8 text-sky-400" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
           </div>
-          <h2 className="text-white font-bold text-lg">Menunggu Pembayaran</h2>
-          <p className="text-slate-400 text-sm mt-2 max-w-xs">Selesaikan pembayaran di halaman Midtrans. Halaman ini otomatis terupdate.</p>
-          <button onClick={() => window.open(paymentUrl, '_blank', 'noopener,noreferrer')} className="mt-6 px-5 py-2.5 rounded-xl text-sm font-medium border border-sky-500/30 text-sky-400 bg-sky-500/10 hover:bg-sky-500/20 transition-colors">Buka Ulang Halaman Bayar</button>
-          <button onClick={handleReset} className="mt-3 text-slate-600 text-xs hover:text-slate-400 transition-colors">Batalkan</button>
+          <h2 className="text-white font-bold text-lg">Memuat Halaman Pembayaran</h2>
+          <p className="text-slate-400 text-sm mt-2 max-w-xs">
+            Pilih metode pembayaran di popup yang muncul. Selesaikan pembayaran tanpa menutup halaman ini.
+          </p>
+          <button onClick={handleReset} className="mt-6 text-slate-600 text-xs hover:text-slate-400 transition-colors">Batalkan</button>
         </div>
       </div>
     )
@@ -245,7 +292,7 @@ export default function GameTopUpPage() {
       </div>
 
       {/* Step 1 — Pilih nominal */}
-      {(step === 'select' || step === 'input' || step === 'confirm' || step === 'payment') && (
+      {(step === 'select' || step === 'input' || step === 'confirm') && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-white font-semibold"><span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold mr-2">1</span>Pilih Nominal</h2>
@@ -273,11 +320,11 @@ export default function GameTopUpPage() {
       )}
 
       {/* Step 2 — Input ID */}
-      {(step === 'input' || step === 'confirm' || step === 'payment') && selectedProduct && (
+      {(step === 'input' || step === 'confirm') && selectedProduct && (
         <div className="rounded-2xl border border-slate-700/50 p-6 space-y-4" style={{ background: 'rgba(15,20,35,0.8)' }}>
           <div className="flex items-center justify-between">
             <h2 className="text-white font-semibold"><span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold mr-2">2</span>Masukkan {gameInfo.userIdLabel}</h2>
-            {(step === 'confirm' || step === 'payment') && <button onClick={() => setStep('input')} className="text-sky-400 text-sm hover:text-sky-300 transition-colors">Ubah</button>}
+            {step === 'confirm' && <button onClick={() => setStep('input')} className="text-sky-400 text-sm hover:text-sky-300 transition-colors">Ubah</button>}
           </div>
           {step === 'input' ? (
             <div className="space-y-4">
@@ -351,7 +398,7 @@ export default function GameTopUpPage() {
       )}
 
       {/* Step 3 — Konfirmasi & Bayar */}
-      {(step === 'confirm' || step === 'payment') && selectedProduct && (
+      {step === 'confirm' && selectedProduct && (
         <div className="rounded-2xl border border-slate-700/50 p-6 space-y-4" style={{ background: 'rgba(15,20,35,0.8)' }}>
           <h2 className="text-white font-semibold"><span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold mr-2">3</span>Konfirmasi &amp; Pembayaran</h2>
           <div className="rounded-xl border border-slate-700/40 overflow-hidden">
@@ -368,33 +415,20 @@ export default function GameTopUpPage() {
               </div>
             ))}
           </div>
+
           {inputError && <p className="text-red-400 text-sm">{inputError}</p>}
-          {step === 'confirm' ? (
-            <>
-              <p className="text-slate-500 text-xs">Pastikan ID sudah benar. Transaksi yang sudah diproses tidak dapat dibatalkan.</p>
-              <button onClick={handleConfirm} disabled={creating}
-                className="w-full py-3.5 rounded-xl font-semibold text-sm text-white transition-all disabled:opacity-60"
-                style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: '0 0 20px rgba(14,165,233,0.3)' }}>
-                {creating ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                    Membuat Pembayaran...
-                  </span>
-                ) : `Lanjut Bayar ${formatCurrency(selectedProduct.price)}`}
-              </button>
-            </>
-          ) : (
-            <div className="space-y-3">
-              <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                <svg className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
-                <p className="text-emerald-400 text-sm">Sesi pembayaran siap. Klik tombol di bawah untuk membayar.</p>
-              </div>
-              <button onClick={handleOpenPayment} className="w-full py-3.5 rounded-xl font-semibold text-sm text-white transition-all"
-                style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: '0 0 20px rgba(14,165,233,0.3)' }}>
-                Bayar Sekarang
-              </button>
-            </div>
-          )}
+
+          <p className="text-slate-500 text-xs">Pastikan ID sudah benar. Transaksi yang sudah diproses tidak dapat dibatalkan.</p>
+          <button onClick={handleConfirm} disabled={creating}
+            className="w-full py-3.5 rounded-xl font-semibold text-sm text-white transition-all disabled:opacity-60"
+            style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: '0 0 20px rgba(14,165,233,0.3)' }}>
+            {creating ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                Memuat Pembayaran...
+              </span>
+            ) : `Bayar ${formatCurrency(selectedProduct.price)}`}
+          </button>
         </div>
       )}
     </div>
