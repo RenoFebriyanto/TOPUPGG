@@ -9,18 +9,15 @@ export default async function HomePage() {
   const games = Object.entries(SUPPORTED_GAMES)
 
   return (
-    <div className="min-h-screen bg-[#080C14] text-white">
+    <div className="min-h-screen bg-[#080d1a] text-white">
 
       {/* Navbar */}
-      <header className="border-b border-slate-800/60 sticky top-0 z-50"
-        style={{ background: 'rgba(8,12,20,0.95)', backdropFilter: 'blur(12px)' }}>
+      <header className="border-b border-[#1a2844]/60 sticky top-0 z-50"
+        style={{ background: 'rgba(8,13,26,0.95)', backdropFilter: 'blur(12px)' }}>
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center shadow-lg shadow-sky-500/30">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M8 1L14 4.5V11.5L8 15L2 11.5V4.5L8 1Z" fill="white" fillOpacity="0.9"/>
-                <path d="M5 8H11M8 5V11" stroke="#0EA5E9" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
+              <img src="/threetop-32x32.png" alt="ThreeTop" />
             </div>
             <span className="text-xl font-black tracking-tight">THREE<span className="text-sky-400">TOP</span></span>
           </div>
@@ -104,7 +101,7 @@ export default async function HomePage() {
                   Mulai Top Up Sekarang
                 </Link>
                 <Link href="/auth/login"
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-base font-medium text-slate-300 border border-slate-700/50 hover:text-white hover:border-slate-600 transition-colors">
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-base font-medium text-slate-300 border border-[#243558]/50 hover:text-white hover:border-slate-600 transition-colors">
                   Sudah punya akun? Masuk
                 </Link>
               </>
@@ -128,7 +125,7 @@ export default async function HomePage() {
       </section>
 
       {/* Game list */}
-      <section id="games" className="py-20 border-t border-slate-800/40">
+      <section id="games" className="py-20 border-t border-[#1a2844]/40">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-white mb-3">Game yang Tersedia</h2>
@@ -138,10 +135,10 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {games.map(([key, game]) => (
               <Link key={key} href="/auth/register"
-                className="group relative rounded-2xl overflow-hidden border border-slate-700/50 hover:border-slate-500/60 transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl text-center">
+                className="group relative rounded-2xl overflow-hidden border border-[#243558]/50 hover:border-slate-500/60 transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl text-center">
                 <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-20 group-hover:opacity-35 transition-opacity`} />
-                <div className="relative p-5" style={{ background: 'rgba(15,20,35,0.85)' }}>
-                  <div className="w-12 h-12 rounded-xl bg-slate-800/60 flex items-center justify-center mx-auto mb-3 overflow-hidden">
+                <div className="relative p-5" style={{ background: 'rgba(10,16,32,0.85)' }}>
+                  <div className="w-12 h-12 rounded-xl bg-[#0e1628]/60 flex items-center justify-center mx-auto mb-3 overflow-hidden">
                     {/* Icon placeholder — pakai teks singkat sampai PNG tersedia */}
                     <span className="text-slate-300 text-xs font-bold">{game.icon}</span>
                   </div>
@@ -159,7 +156,7 @@ export default async function HomePage() {
       </section>
 
       {/* Cara Top Up */}
-      <section id="cara-topup" className="py-20 border-t border-slate-800/40">
+      <section id="cara-topup" className="py-20 border-t border-[#1a2844]/40">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-white mb-3">Cara Top Up</h2>
@@ -188,8 +185,8 @@ export default async function HomePage() {
               },
             ].map((item) => (
               <div key={item.step}
-                className="rounded-2xl border border-slate-700/50 p-6 relative overflow-hidden"
-                style={{ background: 'rgba(15,20,35,0.8)' }}>
+                className="rounded-2xl border border-[#243558]/50 p-6 relative overflow-hidden"
+                style={{ background: 'rgba(10,16,32,0.8)' }}>
                 <div className={`absolute top-4 right-4 text-5xl font-black text-${item.color}-500/10`}>
                   {item.step}
                 </div>
@@ -205,7 +202,7 @@ export default async function HomePage() {
       </section>
 
       {/* Keunggulan */}
-      <section id="keunggulan" className="py-20 border-t border-slate-800/40">
+      <section id="keunggulan" className="py-20 border-t border-[#1a2844]/40">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-white mb-3">Kenapa ThreeTop?</h2>
@@ -252,8 +249,8 @@ export default async function HomePage() {
               },
             ].map((item) => (
               <div key={item.title}
-                className="rounded-2xl border border-slate-700/50 p-6"
-                style={{ background: 'rgba(15,20,35,0.8)' }}>
+                className="rounded-2xl border border-[#243558]/50 p-6"
+                style={{ background: 'rgba(10,16,32,0.8)' }}>
                 <div className={`w-12 h-12 rounded-xl bg-${item.color}-500/10 border border-${item.color}-500/20 flex items-center justify-center mb-4 text-${item.color}-400`}>
                   {item.icon}
                 </div>
@@ -266,7 +263,7 @@ export default async function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 border-t border-slate-800/40">
+      <section className="py-20 border-t border-[#1a2844]/40">
         <div className="max-w-2xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Siap Top Up Sekarang?</h2>
           <p className="text-slate-400 mb-8">
@@ -284,15 +281,12 @@ export default async function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/60 py-8">
+      <footer className="border-t border-[#1a2844]/60 py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-md bg-sky-500 flex items-center justify-center">
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                  <path d="M8 1L14 4.5V11.5L8 15L2 11.5V4.5L8 1Z" fill="white" fillOpacity="0.9"/>
-                  <path d="M5 8H11M8 5V11" stroke="#0EA5E9" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
+                <img src="/threetop-32x32.png" alt="ThreeTop" />
               </div>
               <span className="text-sm font-black text-white">THREE<span className="text-sky-400">TOP</span></span>
             </div>

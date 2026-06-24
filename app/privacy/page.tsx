@@ -166,9 +166,9 @@ const SECTIONS = [
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-[#080C14]">
+    <div className="min-h-screen bg-[#080d1a]">
       {/* Header */}
-      <div className="border-b border-slate-800/60 sticky top-0 z-10" style={{ background: 'rgba(8,12,20,0.97)', backdropFilter: 'blur(12px)' }}>
+      <div className="border-b border-[#1a2844]/60 sticky top-0 z-10" style={{ background: 'rgba(8,13,26,0.97)', backdropFilter: 'blur(12px)' }}>
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center gap-4">
           <Logo />
           <span className="text-slate-600">/</span>
@@ -222,8 +222,8 @@ export default function PrivacyPage() {
             {/* Sections */}
             {SECTIONS.map((section) => (
               <div key={section.id} id={section.id}
-                className="rounded-2xl border border-slate-700/50 p-6 scroll-mt-20"
-                style={{ background: 'rgba(15,20,35,0.8)' }}>
+                className="rounded-2xl border border-[#243558]/50 p-6 scroll-mt-20"
+                style={{ background: 'rgba(10,16,32,0.8)' }}>
                 <h2 className="text-white font-semibold text-lg mb-4">{section.title}</h2>
                 <ul className="space-y-3">
                   {section.content.map((item, i) => (
@@ -237,7 +237,7 @@ export default function PrivacyPage() {
             ))}
 
             {/* Footer */}
-            <div className="rounded-2xl border border-slate-700/30 p-6 text-center" style={{ background: 'rgba(15,20,35,0.6)' }}>
+            <div className="rounded-2xl border border-[#243558]/30 p-6 text-center" style={{ background: 'rgba(10,16,32,0.6)' }}>
               <p className="text-slate-400 text-sm mb-2">
                 Pertanyaan tentang privasi? Hubungi kami di{' '}
                 <a href="mailto:privacy@threetop.id" className="text-sky-400 hover:text-sky-300 transition-colors">
@@ -247,7 +247,7 @@ export default function PrivacyPage() {
               <p className="text-slate-600 text-xs mb-5">Versi {LAST_UPDATED}</p>
               <div className="flex items-center justify-center gap-3 flex-wrap">
                 <Link href="/terms"
-                  className="px-5 py-2.5 rounded-xl text-sm font-medium text-slate-300 border border-slate-700/50 hover:text-white hover:border-slate-600 transition-colors">
+                  className="px-5 py-2.5 rounded-xl text-sm font-medium text-slate-300 border border-[#243558]/50 hover:text-white hover:border-slate-600 transition-colors">
                   Syarat &amp; Ketentuan
                 </Link>
                 <Link href="/dashboard"

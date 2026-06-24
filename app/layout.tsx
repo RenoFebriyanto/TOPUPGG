@@ -23,10 +23,22 @@ export const metadata: Metadata = {
   keywords: ["top up game", "diamond ml", "uc pubg", "free fire diamond", "top up murah", "threetop"],
   authors: [{ name: "ThreeTop" }],
   creator: "ThreeTop",
+  icons: {
+    icon: [
+      { url: "/threetop-16x16.png",  sizes: "16x16",  type: "image/png" },
+      { url: "/threetop-32x32.png",  sizes: "32x32",  type: "image/png" },
+      { url: "/threetop.ico",         rel: "shortcut icon" },
+    ],
+    apple: "/threetop-apple-touch-icon.png",
+    other: [
+      { rel: "android-chrome-192x192", url: "/threetop-android-chrome-192x192.png" },
+      { rel: "android-chrome-512x512", url: "/threetop-android-chrome-512x512.png" },
+    ],
+  },
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: process.env.AUTH_URL ?? "https://threetop.id",
+    url: process.env.AUTH_URL ?? "https://threetopofficial.vercel.app",
     siteName: "ThreeTop",
     title: "ThreeTop — Platform Top Up Game Indonesia",
     description: "Top up game favorit kamu dengan harga terbaik. Proses instan, aman, dan terpercaya.",

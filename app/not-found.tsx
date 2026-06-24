@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-[#080C14] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#080d1a] flex items-center justify-center px-4">
       <div className="text-center max-w-md">
         {/* Glow */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -28,7 +28,7 @@ export default function NotFound() {
             </Link>
             <Link
               href="/"
-              className="px-5 py-2.5 rounded-xl text-sm font-medium text-slate-400 border border-slate-700/50 hover:text-white hover:border-slate-600 transition-colors"
+              className="px-5 py-2.5 rounded-xl text-sm font-medium text-slate-400 border border-[#243558]/50 hover:text-white hover:border-slate-600 transition-colors"
             >
               Beranda
             </Link>
