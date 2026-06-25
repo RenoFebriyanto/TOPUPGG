@@ -219,12 +219,12 @@ export default async function DashboardPage() {
               Lihat semua →
             </Link>
           </div>
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="flex flex-wrap gap-3 justify-start">
             {POPULAR_GAMES.map((game) => (
               <Link
                 key={game.key}
                 href={`/dashboard/topup/${game.key}`}
-                className="group relative rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-border)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg flex-none basis-full sm:basis-[calc(50%-0.75rem)] md:basis-[calc(33.333%-1rem)] min-w-0"
+                className="group relative rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-border)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg flex-none basis-[calc(50%-0.75rem)] sm:basis-[calc(50%-0.75rem)] md:basis-[calc(33.333%-1rem)] lg:basis-[calc(25%-1rem)] min-w-0"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-20 group-hover:opacity-30 transition-opacity`} />
                 <div className="relative p-4 flex flex-col items-center text-center gap-2">
