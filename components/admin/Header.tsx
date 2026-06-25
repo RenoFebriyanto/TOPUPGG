@@ -17,7 +17,7 @@ export default function AdminHeader({ user }: { user: User }) {
 
   return (
     <header className="sticky top-0 z-10 border-b border-slate-800/60 px-4 lg:px-8 py-4 flex items-center justify-between gap-4"
-      style={{ background: 'rgba(8,12,20,0.95)', backdropFilter: 'blur(12px)' }}
+      style={{ background: 'rgba(10,15,30,0.95)', backdropFilter: 'blur(12px)' }}
     >
       <h2 className="hidden lg:block text-white font-semibold text-lg">{title}</h2>
       <div className="flex items-center gap-2 lg:hidden">

@@ -137,7 +137,7 @@ export default function PromoCarousel({
             />
           ) : (
             // Fallback gradient jika image belum ada
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-900 to-[#080C14]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-900 to-[#0a0f1e]" />
           )}
 
           {/* Overlay gelap untuk readability teks */}

@@ -166,9 +166,9 @@ const SECTIONS = [
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-[#080d1a]">
+    <div className="min-h-screen bg-[#0a0f1e]">
       {/* Header */}
-      <div className="border-b border-[#1a2844]/60 sticky top-0 z-10" style={{ background: 'rgba(8,13,26,0.97)', backdropFilter: 'blur(12px)' }}>
+      <div className="border-b border-[#1a2844]/60 sticky top-0 z-10" style={{ background: 'rgba(10,15,30,0.97)', backdropFilter: 'blur(12px)' }}>
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center gap-4">
           <Logo />
           <span className="text-slate-600">/</span>

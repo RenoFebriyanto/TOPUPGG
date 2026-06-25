@@ -76,7 +76,7 @@ export default function DashboardSidebar({ user }: { user: User }) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col fixed left-0 top-0 h-screen w-64 border-r border-slate-800/60 z-20"
+      <aside className="hidden lg:flex flex-col fixed left-0 top-0 h-screen w-64 border-r border-[#1e2d4a] z-20"
         style={{ background: '#0a0f1e' }}
       >
         {/* Logo */}

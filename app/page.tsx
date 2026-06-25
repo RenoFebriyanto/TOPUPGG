@@ -9,11 +9,11 @@ export default async function HomePage() {
   const games = Object.entries(SUPPORTED_GAMES)
 
   return (
-    <div className="min-h-screen bg-[#080d1a] text-white">
+    <div className="min-h-screen bg-[#0a0f1e] text-white">
 
       {/* Navbar */}
       <header className="border-b border-[#1a2844]/60 sticky top-0 z-50"
-        style={{ background: 'rgba(8,13,26,0.95)', backdropFilter: 'blur(12px)' }}>
+        style={{ background: 'rgba(10,15,30,0.95)', backdropFilter: 'blur(12px)' }}>
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center shadow-lg shadow-sky-500/30">

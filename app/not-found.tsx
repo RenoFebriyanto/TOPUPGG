@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-[#080d1a] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#0a0f1e] flex items-center justify-center px-4">
       <div className="text-center max-w-md">
         {/* Glow */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
