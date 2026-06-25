@@ -109,11 +109,11 @@ export default async function AdminDashboardPage() {
       )}
 
       {/* Stat cards */}
-      <div className="flex flex-wrap gap-4 justify-center">
+      <div className="flex flex-wrap gap-2 justify-between">
         {statCards.map((card) => {
           const colors = accentMap[card.accent]
           return (
-            <div key={card.label} className={`rounded-lg border ${colors.border} p-5`} style={{ background: 'var(--color-surface-dark)', flex: '1 1 220px', minWidth: '220px', maxWidth: '300px' }}>
+            <div key={card.label} className={`rounded-lg border ${colors.border} p-3 sm:p-4 shadow-lg flex-none basis-[calc(50%-0.5rem)] md:basis-[calc(25%-0.75rem)] max-w-[calc(50%-0.5rem)] md:max-w-[calc(25%-0.75rem)] min-w-[140px]`} style={{ background: 'var(--color-surface)' }}>
               <div className="flex items-start justify-between mb-3">
                 <p className="text-[var(--color-muted)] text-xs font-medium">{card.label}</p>
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${colors.icon}`}>{card.icon}</div>
@@ -126,10 +126,10 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Status breakdown + Recent orders */}
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-6">
 
         {/* Status breakdown */}
-        <div className="rounded-lg border border-[var(--color-border)] p-6 space-y-4" style={{ background: 'var(--color-surface-dark)' }}>
+        <div className="rounded-lg border border-[var(--color-border)] p-6 space-y-4 md:basis-1/2" style={{ background: 'var(--color-surface-dark)' }}>
           <h2 className="text-white font-semibold">Status Transaksi</h2>
           {[
             { label: 'Sukses', count: successOrders, color: 'bg-[var(--color-success)]' },
@@ -155,7 +155,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         {/* Recent orders */}
-        <div className="rounded-lg border border-[var(--color-border)] p-6" style={{ background: 'var(--color-surface-dark)' }}>
+        <div className="rounded-lg border border-[var(--color-border)] p-6 md:basis-1/2" style={{ background: 'var(--color-surface-dark)' }}>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-white font-semibold">Transaksi Terbaru</h2>
             <Link href="/admin/orders" className="text-[var(--color-violet)] text-sm hover:text-[var(--color-violet)]/80 transition-colors">Lihat semua →</Link>
@@ -163,7 +163,7 @@ export default async function AdminDashboardPage() {
           {recentOrders.length === 0 ? (
             <p className="text-[var(--color-muted-strong)] text-sm text-center py-8">Belum ada transaksi</p>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2 overflow-y-auto max-h-[min(55vh,520px)] pr-1">
               {recentOrders.map((order) => {
                 const status = STATUS_CONFIG[order.status as keyof typeof STATUS_CONFIG]
                 return (
@@ -188,7 +188,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Quick links */}
-      <div className="flex flex-wrap gap-4 justify-center">
+      <div className="flex flex-wrap gap-4 justify-between">
         {[
           { label: 'Kelola Transaksi', href: '/admin/orders',   color: 'border-[var(--color-violet-border)] hover:border-[var(--color-violet-border)]/60',
             icon: <svg className="w-6 h-6 text-[var(--color-violet)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg> },
@@ -200,11 +200,11 @@ export default async function AdminDashboardPage() {
             icon: <svg className="w-6 h-6 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg> },
         ].map((item) => (
           <Link key={item.href} href={item.href}
-            className={`rounded-lg border p-4 flex flex-col items-center gap-2 text-center transition-all duration-200 hover:-translate-y-0.5 ${item.color}`}
+            className={`rounded-lg border p-4 flex flex-col items-center gap-2 text-center transition-all duration-200 hover:-translate-y-0.5 ${item.color} flex-none basis-[calc(25%-0.75rem)] max-w-[220px] min-w-[140px]`} 
             style={{ background: 'var(--color-surface-dark)' }}
           >
             {item.icon}
-            <span className="text-[var(--color-frost)] text-xs font-medium">{item.label}</span>
+            <span className="text-[var(--color-frost)] text-sm font-medium">{item.label}</span>
           </Link>
         ))}
       </div>
