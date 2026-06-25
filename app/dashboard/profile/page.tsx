@@ -95,7 +95,7 @@ export default async function ProfilePage() {
       {/* Stats cards */}
       <div className="flex flex-wrap gap-4 justify-center">
         {stats.map((s) => (
-          <div key={s.label} className="rounded-lg border border-[var(--color-border)] p-4 text-center" style={{ background: 'var(--color-surface-dark)', flex: '1 1 180px', minWidth: '180px', maxWidth: '260px' }}>
+          <div key={s.label} className="rounded-lg border border-[var(--color-border)] p-4 text-center flex-auto basis-full sm:basis-[calc(50%-1rem)] xl:basis-[calc(25%-1rem)] min-w-0" style={{ background: 'var(--color-surface-dark)' }}>
             <div className="w-10 h-10 rounded-lg bg-[var(--color-info-bg)] border border-[var(--color-info-border)] flex items-center justify-center mx-auto mb-2 text-[var(--color-frost)]">
               {s.icon}
             </div>
