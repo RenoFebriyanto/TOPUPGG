@@ -50,7 +50,7 @@ export default function AdminOrderActions({
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-8 z-20 w-36 rounded-lg border border-slate-700/60 overflow-hidden shadow-2xl"
-            style={{ background: 'rgba(15,20,35,0.98)' }}>
+            style={{ background: 'rgba(10,15,30,0.85)' }}>
             {others.map((s) => (
               <button key={s} onClick={() => updateStatus(s)}
                 className="w-full text-left px-3 py-2.5 text-xs text-[#e4f0f6] hover:bg-[#111827]/80 hover:text-[#e4f0f6] transition-colors">

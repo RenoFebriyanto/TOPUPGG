@@ -12,7 +12,7 @@ const STATUS_CONFIG = {
   SUCCESS:    { label: 'Sukses',    color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-400/20' },
   FAILED:     { label: 'Gagal',     color: 'text-red-400',     bg: 'bg-red-400/10 border-red-400/20' },
   PENDING:    { label: 'Pending',   color: 'text-amber-400',   bg: 'bg-amber-400/10 border-amber-400/20' },
-  PROCESSING: { label: 'Diproses', color: 'text-sky-400',     bg: 'bg-sky-400/10 border-sky-400/20' },
+  PROCESSING: { label: 'Diproses', color: 'text-[#e4f0f6]',     bg: 'bg-sky-400/10 border-sky-400/20' },
 } as const
 
 function formatCurrency(amount: number) {
@@ -42,7 +42,7 @@ export default async function OrdersPage() {
             {processingCount > 0 && <span className="ml-2 text-amber-400">· {processingCount} sedang diproses</span>}
           </p>
         </div>
-        <Link href="/dashboard/topup" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-400 text-sm font-medium hover:bg-sky-500/20 transition-colors">
+        <Link href="/dashboard/topup" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500/10 border border-sky-500/20 text-[#e4f0f6] text-sm font-medium hover:bg-sky-500/20 transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
           Top Up Lagi
         </Link>
@@ -50,13 +50,13 @@ export default async function OrdersPage() {
 
       {/* Empty state */}
       {orders.length === 0 && (
-        <div className="rounded-lg border border-[#1e2d4a] p-16 flex flex-col items-center justify-center text-center" style={{ background: 'rgba(17,24,39,0.8)' }}>
+        <div className="rounded-lg border border-[#1e2d4a] p-16 flex flex-col items-center justify-center text-center" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <div className="w-16 h-16 rounded-lg bg-[#111827] flex items-center justify-center mb-4">
             <svg className="w-8 h-8 text-[#3d5a73]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
           </div>
           <p className="text-[#e4f0f6] font-semibold mb-1">Belum ada transaksi</p>
           <p className="text-[#5a8099] text-sm mb-6">Mulai top up game pertamamu!</p>
-          <Link href="/dashboard/topup" className="px-5 py-2.5 rounded-lg text-sm font-semibold text-[#e4f0f6]" style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)' }}>
+          <Link href="/dashboard/topup" className="px-5 py-2.5 rounded-lg text-sm font-semibold text-[#e4f0f6]" style={{ background: '#e4f0f6' }}>
             Top Up Sekarang
           </Link>
         </div>
@@ -71,7 +71,7 @@ export default async function OrdersPage() {
             const canRetry = order.paymentStatus === 'PAID' && (order.status === 'PROCESSING' || order.status === 'FAILED')
 
             return (
-              <div key={order.id} className="rounded-lg border border-[#1e2d4a] p-5 transition-colors hover:border-[#1e2d4a]/60" style={{ background: 'rgba(17,24,39,0.8)' }}>
+              <div key={order.id} className="rounded-lg border border-[#1e2d4a] p-5 transition-colors hover:border-[#1e2d4a]/60" style={{ background: 'rgba(10,15,30,0.85)' }}>
                 <div className="flex items-center gap-4">
                   {/* Game icon */}
                   <Link href={`/dashboard/orders/${order.id}`} className="w-12 h-12 rounded-lg bg-[#111827]/80 border border-[#1e2d4a] flex items-center justify-center shrink-0 overflow-hidden hover:border-sky-500/40 transition-colors">
@@ -111,7 +111,7 @@ export default async function OrdersPage() {
 
                 {order.paymentStatus === 'UNPAID' && order.paymentUrl && (
                   <div className="mt-3 pt-3 border-t border-[#1e2d4a]/60">
-                    <a href={order.paymentUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs text-sky-400 hover:text-sky-300 transition-colors">
+                    <a href={order.paymentUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs text-[#e4f0f6] hover:text-[#e4f0f6] transition-colors">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                       Lanjutkan Pembayaran
                     </a>

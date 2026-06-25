@@ -22,7 +22,7 @@ export default function NotFound() {
             <Link
               href="/dashboard"
               className="px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-all hover:scale-105"
-              style={{ background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', boxShadow: '0 0 20px rgba(14,165,233,0.3)' }}
+              style={{ background: '#e4f0f6', boxShadow: '0 0 20px rgba(14,165,233,0.3)' }}
             >
               Ke Dashboard
             </Link>

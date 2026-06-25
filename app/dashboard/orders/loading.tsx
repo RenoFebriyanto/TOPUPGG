@@ -11,7 +11,7 @@ export default function OrdersLoading() {
       </div>
       {/* Order cards */}
       {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="rounded-xl border border-[#1e2d4a]/40 p-5" style={{ background: 'rgba(17,24,39,0.6)' }}>
+        <div key={i} className="rounded-xl border border-[#1e2d4a]/40 p-5" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-[#111827]/60 shrink-0" />
             <div className="flex-1 space-y-2">

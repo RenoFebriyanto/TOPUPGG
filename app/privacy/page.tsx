@@ -17,7 +17,7 @@ function Logo() {
           <path d="M5 8H11M8 5V11" stroke="#0EA5E9" strokeWidth="1.5" strokeLinecap="round"/>
         </svg>
       </div>
-      <span className="text-base font-black text-white">THREE<span className="text-sky-400">TOP</span></span>
+      <span className="text-base font-black text-white">THREE<span className="text-[#e4f0f6]">TOP</span></span>
     </Link>
   )
 }
@@ -175,7 +175,7 @@ export default function PrivacyPage() {
           <span className="text-slate-400 text-sm">Kebijakan Privasi</span>
           <div className="ml-auto flex items-center gap-3">
             <Link href="/terms" className="text-slate-500 hover:text-slate-300 text-xs transition-colors">Syarat &amp; Ketentuan</Link>
-            <Link href="/dashboard" className="text-sky-400 hover:text-sky-300 text-xs transition-colors">Dashboard</Link>
+            <Link href="/dashboard" className="text-[#e4f0f6] hover:text-[#e4f0f6] text-xs transition-colors">Dashboard</Link>
           </div>
         </div>
       </div>
@@ -240,7 +240,7 @@ export default function PrivacyPage() {
             <div className="rounded-2xl border border-[#243558]/30 p-6 text-center" style={{ background: 'rgba(10,16,32,0.6)' }}>
               <p className="text-slate-400 text-sm mb-2">
                 Pertanyaan tentang privasi? Hubungi kami di{' '}
-                <a href="mailto:privacy@threetop.id" className="text-sky-400 hover:text-sky-300 transition-colors">
+                <a href="mailto:privacy@threetop.id" className="text-[#e4f0f6] hover:text-[#e4f0f6] transition-colors">
                   privacy@threetop.id
                 </a>
               </p>
@@ -252,7 +252,7 @@ export default function PrivacyPage() {
                 </Link>
                 <Link href="/dashboard"
                   className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:scale-105"
-                  style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)' }}>
+                  style={{ background: '#e4f0f6' }}>
                   Kembali ke Dashboard
                 </Link>
               </div>

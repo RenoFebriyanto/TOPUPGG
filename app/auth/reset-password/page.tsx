@@ -21,7 +21,7 @@ function ResetPasswordForm() {
         <div className="rounded-lg p-8 border border-red-500/20 bg-red-500/5">
           <p className="text-red-400 font-semibold mb-2">Link Tidak Valid</p>
           <p className="text-[#a8c4d4] text-sm mb-4">Token reset password tidak ditemukan atau sudah kedaluwarsa.</p>
-          <Link href="/auth/login" className="text-sky-400 text-sm hover:text-sky-300 transition-colors">
+          <Link href="/auth/login" className="text-[#e4f0f6] text-sm hover:text-[#e4f0f6] transition-colors">
             Kembali ke login
           </Link>
         </div>
@@ -75,7 +75,7 @@ function ResetPasswordForm() {
             </svg>
           </div>
           <span className="text-2xl font-black tracking-tight text-[#e4f0f6]">
-            THREE<span className="text-sky-400">TOP</span>
+            THREE<span className="text-[#e4f0f6]">TOP</span>
           </span>
         </div>
         <h1 className="text-2xl font-bold text-[#e4f0f6] mb-1">Buat Password Baru</h1>
@@ -83,7 +83,7 @@ function ResetPasswordForm() {
       </div>
 
       <div className="rounded-lg p-8 border border-[#1e2d4a]/50 shadow-2xl"
-        style={{ background: 'linear-gradient(135deg, rgba(10,15,30,0.95) 0%, rgba(17,24,39,0.98) 100%)', backdropFilter: 'blur(20px)' }}>
+        style={{ background: 'linear-gradient(135deg, rgba(10,15,30,0.95) 0%, rgba(10,15,30,0.85) 100%)', backdropFilter: 'blur(20px)' }}>
 
         {success ? (
           <div className="text-center py-4 space-y-4">
@@ -141,7 +141,7 @@ function ResetPasswordForm() {
 
             <button type="submit" disabled={loading}
               className="w-full py-3.5 rounded-lg font-semibold text-sm text-[#e4f0f6] transition-all disabled:opacity-60"
-              style={{ background: loading ? 'rgba(14,165,233,0.4)' : 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: loading ? 'none' : '0 0 20px rgba(14,165,233,0.3)' }}>
+              style={{ background: loading ? 'rgba(14,165,233,0.4)' : '#e4f0f6', boxShadow: loading ? 'none' : '0 0 20px rgba(14,165,233,0.3)' }}>
               {loading
                 ? <span className="flex items-center justify-center gap-2"><svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>Menyimpan...</span>
                 : 'Simpan Password Baru'}

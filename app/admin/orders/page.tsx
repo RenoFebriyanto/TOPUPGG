@@ -11,7 +11,7 @@ const STATUS_CONFIG = {
   SUCCESS:    { label: 'Sukses',    color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-400/20' },
   FAILED:     { label: 'Gagal',     color: 'text-red-400',     bg: 'bg-red-400/10 border-red-400/20' },
   PENDING:    { label: 'Pending',   color: 'text-amber-400',   bg: 'bg-amber-400/10 border-amber-400/20' },
-  PROCESSING: { label: 'Diproses', color: 'text-sky-400',     bg: 'bg-sky-400/10 border-sky-400/20' },
+  PROCESSING: { label: 'Diproses', color: 'text-[#e4f0f6]',     bg: 'bg-sky-400/10 border-sky-400/20' },
 } as const
 
 function formatCurrency(n: number) {
@@ -99,7 +99,7 @@ export default async function AdminOrdersPage({
       </div>
 
       {/* Table */}
-      <div className="rounded-lg border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(17,24,39,0.8)' }}>
+      <div className="rounded-lg border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(10,15,30,0.85)' }}>
         {orders.length === 0 ? (
           <div className="p-12 text-center">
             <p className="text-[#5a8099] text-sm">Tidak ada transaksi ditemukan</p>

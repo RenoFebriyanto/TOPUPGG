@@ -44,7 +44,7 @@ export default async function AdminProductsPage() {
       {Object.entries(SUPPORTED_GAMES).map(([gameKey, gameInfo]) => {
         const gameProducts = grouped[gameKey] ?? []
         return (
-          <div key={gameKey} className="rounded-lg border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(17,24,39,0.8)' }}>
+          <div key={gameKey} className="rounded-lg border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(10,15,30,0.85)' }}>
             {/* Game header */}
             <div className="flex items-center gap-3 px-5 py-4 border-b border-[#1e2d4a]/60">
               <div className="w-9 h-9 rounded-lg overflow-hidden bg-[#111827] shrink-0 flex items-center justify-center">
@@ -76,7 +76,7 @@ export default async function AdminProductsPage() {
                       <tr key={p.buyer_sku_code} className="hover:bg-[#111827]/20 transition-colors">
                         <td className="px-4 py-2.5 font-mono text-[#a8c4d4] text-xs">{p.buyer_sku_code}</td>
                         <td className="px-4 py-2.5 text-white text-xs">{p.product_name}</td>
-                        <td className="px-4 py-2.5 text-sky-400 font-semibold text-xs whitespace-nowrap">{formatCurrency(p.price)}</td>
+                        <td className="px-4 py-2.5 text-[#e4f0f6] font-semibold text-xs whitespace-nowrap">{formatCurrency(p.price)}</td>
                         <td className="px-4 py-2.5 text-[#a8c4d4] text-xs">
                           {p.unlimited_stock ? '∞' : p.stock}
                         </td>

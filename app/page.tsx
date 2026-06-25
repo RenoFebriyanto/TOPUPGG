@@ -2,46 +2,51 @@ import { auth } from '@/lib/auth'
 import Link from 'next/link'
 import { SUPPORTED_GAMES } from '@/lib/digiflazz'
 
+// Abyss: #0a0f1e | Frost: #e4f0f6
+// Button primary: bg #e4f0f6, text #0a0f1e (gelap di atas terang)
+// Background: #0a0f1e
+// Teks: #e4f0f6
+
 export default async function HomePage() {
   const session = await auth()
   const isLoggedIn = !!session
-
   const games = Object.entries(SUPPORTED_GAMES)
 
   return (
-    <div className="min-h-screen bg-[#0a0f1e] text-white">
+    <div className="min-h-screen" style={{ background: '#0a0f1e', color: '#e4f0f6' }}>
 
       {/* Navbar */}
-      <header className="border-b border-[#1a2844]/60 sticky top-0 z-50"
-        style={{ background: 'rgba(10,15,30,0.95)', backdropFilter: 'blur(12px)' }}>
+      <header className="sticky top-0 z-50"
+        style={{ background: 'rgba(10,15,30,0.97)', borderBottom: '1px solid #1e2d4a', backdropFilter: 'blur(12px)' }}>
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center shadow-lg shadow-sky-500/30">
-              <img src="/threetop-32x32.png" alt="ThreeTop" />
-            </div>
-            <span className="text-xl font-black tracking-tight">THREE<span className="text-sky-400">TOP</span></span>
+            <img src="/threetop-32x32.png" alt="ThreeTop" className="w-8 h-8 rounded object-contain" />
+            <span className="text-xl font-black" style={{ color: '#e4f0f6' }}>THREE<span style={{ color: '#e4f0f6' }}>TOP</span></span>
           </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-slate-400">
-            <a href="#games" className="hover:text-white transition-colors">Game</a>
-            <a href="#cara-topup" className="hover:text-white transition-colors">Cara Top Up</a>
-            <a href="#keunggulan" className="hover:text-white transition-colors">Keunggulan</a>
+          <nav className="hidden md:flex items-center gap-6 text-sm" style={{ color: '#a8c4d4' }}>
+            <a href="#games" className="transition-colors" style={{ color: '#a8c4d4' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#e4f0f6')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = '#a8c4d4')}>Game</a>
+            <a href="#cara-topup" style={{ color: '#a8c4d4' }}>Cara Top Up</a>
+            <a href="#keunggulan" style={{ color: '#a8c4d4' }}>Keunggulan</a>
           </nav>
           <div className="flex items-center gap-3">
             {isLoggedIn ? (
               <Link href="/dashboard"
-                className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:scale-105"
-                style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: '0 0 16px rgba(14,165,233,0.3)' }}>
+                className="px-4 py-2 rounded-lg text-sm font-semibold transition-all hover:opacity-90"
+                style={{ background: '#e4f0f6', color: '#0a0f1e' }}>
                 Ke Dashboard
               </Link>
             ) : (
               <>
                 <Link href="/auth/login"
-                  className="text-sm text-slate-400 hover:text-white transition-colors hidden sm:block">
+                  className="text-sm hidden sm:block transition-colors"
+                  style={{ color: '#a8c4d4' }}>
                   Masuk
                 </Link>
                 <Link href="/auth/register"
-                  className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:scale-105"
-                  style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: '0 0 16px rgba(14,165,233,0.3)' }}>
+                  className="px-4 py-2 rounded-lg text-sm font-semibold transition-all hover:opacity-90"
+                  style={{ background: '#e4f0f6', color: '#0a0f1e' }}>
                   Daftar Gratis
                 </Link>
               </>
@@ -52,72 +57,62 @@ export default async function HomePage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        {/* Background effects */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-sky-500/5 rounded-full blur-3xl" />
-          <div className="absolute top-20 left-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl" />
-          <div className="absolute top-20 right-0 w-64 h-64 bg-violet-500/5 rounded-full blur-3xl" />
-          <div className="absolute inset-0 opacity-[0.02]"
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full blur-3xl"
+            style={{ background: 'rgba(228,240,246,0.03)' }} />
+          <div className="absolute inset-0 opacity-[0.015]"
             style={{
-              backgroundImage: 'linear-gradient(rgba(56,189,248,1) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,1) 1px, transparent 1px)',
+              backgroundImage: 'linear-gradient(rgba(228,240,246,1) 1px, transparent 1px), linear-gradient(90deg, rgba(228,240,246,1) 1px, transparent 1px)',
               backgroundSize: '40px 40px',
-            }}
-          />
+            }} />
         </div>
 
         <div className="relative max-w-6xl mx-auto px-4 py-24 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-sky-500/30 bg-sky-500/10 text-sky-400 text-xs font-medium mb-6">
-            <div className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-6"
+            style={{ border: '1px solid rgba(228,240,246,0.2)', background: 'rgba(228,240,246,0.05)', color: '#e4f0f6' }}>
+            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: '#e4f0f6' }} />
             Proses Instan · Harga Terbaik · 50+ Game
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-6" style={{ color: '#e4f0f6' }}>
             Top Up Game Favoritmu
             <br />
-            <span className="text-transparent bg-clip-text"
-              style={{ backgroundImage: 'linear-gradient(135deg, #0ea5e9, #6366f1)' }}>
-              Lebih Mudah &amp; Cepat
-            </span>
+            <span style={{ color: '#e4f0f6' }}>Lebih Mudah &amp; Cepat</span>
           </h1>
 
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-lg max-w-2xl mx-auto mb-10 leading-relaxed" style={{ color: '#a8c4d4' }}>
             ThreeTop hadir sebagai platform top up game digital terpercaya.
-            Diamond, UC, VP, dan mata uang game lainnya langsung masuk ke akunmu
-            dalam hitungan detik.
+            Diamond, UC, VP, dan mata uang game lainnya langsung masuk ke akunmu dalam hitungan detik.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             {isLoggedIn ? (
               <Link href="/dashboard"
-                className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-base font-semibold text-white transition-all hover:scale-105"
-                style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: '0 0 24px rgba(14,165,233,0.4)' }}>
+                className="w-full sm:w-auto px-8 py-3.5 rounded-lg text-base font-semibold transition-all hover:opacity-90"
+                style={{ background: '#e4f0f6', color: '#0a0f1e' }}>
                 Buka Dashboard
               </Link>
             ) : (
               <>
                 <Link href="/auth/register"
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-base font-semibold text-white transition-all hover:scale-105"
-                  style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: '0 0 24px rgba(14,165,233,0.4)' }}>
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-lg text-base font-semibold transition-all hover:opacity-90"
+                  style={{ background: '#e4f0f6', color: '#0a0f1e' }}>
                   Mulai Top Up Sekarang
                 </Link>
                 <Link href="/auth/login"
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-base font-medium text-slate-300 border border-[#243558]/50 hover:text-white hover:border-slate-600 transition-colors">
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-lg text-base font-medium transition-colors"
+                  style={{ border: '1px solid #1e2d4a', color: '#a8c4d4' }}>
                   Sudah punya akun? Masuk
                 </Link>
               </>
             )}
           </div>
 
-          {/* Stats */}
           <div className="grid grid-cols-3 gap-6 max-w-sm mx-auto mt-16">
-            {[
-              { value: '50+', label: 'Game' },
-              { value: '< 1 menit', label: 'Proses' },
-              { value: '24/7', label: 'Layanan' },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <p className="text-2xl font-black text-white">{stat.value}</p>
-                <p className="text-slate-500 text-xs mt-1">{stat.label}</p>
+            {[{ value: '50+', label: 'Game' }, { value: '< 1 menit', label: 'Proses' }, { value: '24/7', label: 'Layanan' }].map((s) => (
+              <div key={s.label} className="text-center">
+                <p className="text-2xl font-black" style={{ color: '#e4f0f6' }}>{s.value}</p>
+                <p className="text-xs mt-1" style={{ color: '#5a8099' }}>{s.label}</p>
               </div>
             ))}
           </div>
@@ -125,76 +120,57 @@ export default async function HomePage() {
       </section>
 
       {/* Game list */}
-      <section id="games" className="py-20 border-t border-[#1a2844]/40">
+      <section id="games" className="py-20" style={{ borderTop: '1px solid #1e2d4a' }}>
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-3">Game yang Tersedia</h2>
-            <p className="text-slate-400">Top up game favoritmu dengan harga kompetitif dan proses instan</p>
+            <h2 className="text-3xl font-bold mb-3" style={{ color: '#e4f0f6' }}>Game yang Tersedia</h2>
+            <p style={{ color: '#a8c4d4' }}>Top up game favoritmu dengan harga kompetitif dan proses instan</p>
           </div>
-
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {games.map(([key, game]) => (
               <Link key={key} href="/auth/register"
-                className="group relative rounded-2xl overflow-hidden border border-[#243558]/50 hover:border-slate-500/60 transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl text-center">
-                <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-20 group-hover:opacity-35 transition-opacity`} />
-                <div className="relative p-5" style={{ background: 'rgba(10,16,32,0.85)' }}>
-                  <div className="w-12 h-12 rounded-xl bg-[#0e1628]/60 flex items-center justify-center mx-auto mb-3 overflow-hidden">
-                    {/* Icon placeholder — pakai teks singkat sampai PNG tersedia */}
-                    <span className="text-slate-300 text-xs font-bold">{game.icon}</span>
+                className="group relative rounded-lg overflow-hidden transition-all duration-200 hover:-translate-y-1 text-center"
+                style={{ border: '1px solid #1e2d4a', background: '#111827' }}>
+                <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-10 group-hover:opacity-20 transition-opacity`} />
+                <div className="relative p-5">
+                  <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3 overflow-hidden"
+                    style={{ background: '#1e2d4a' }}>
+                    <span className="text-xs font-bold" style={{ color: '#a8c4d4' }}>{game.icon}</span>
                   </div>
-                  <p className="text-white text-xs font-semibold leading-tight">{game.label}</p>
-                  <p className="text-slate-500 text-xs mt-1">{game.tag}</p>
+                  <p className="text-xs font-semibold leading-tight" style={{ color: '#e4f0f6' }}>{game.label}</p>
+                  <p className="text-xs mt-1" style={{ color: '#5a8099' }}>{game.tag}</p>
                 </div>
               </Link>
             ))}
           </div>
-
-          <p className="text-center text-slate-500 text-sm mt-6">
+          <p className="text-center text-sm mt-6" style={{ color: '#5a8099' }}>
             Dan 50+ game lainnya tersedia setelah kamu masuk
           </p>
         </div>
       </section>
 
       {/* Cara Top Up */}
-      <section id="cara-topup" className="py-20 border-t border-[#1a2844]/40">
+      <section id="cara-topup" className="py-20" style={{ borderTop: '1px solid #1e2d4a' }}>
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-3">Cara Top Up</h2>
-            <p className="text-slate-400">Proses mudah, cepat, dan aman hanya dalam 3 langkah</p>
+            <h2 className="text-3xl font-bold mb-3" style={{ color: '#e4f0f6' }}>Cara Top Up</h2>
+            <p style={{ color: '#a8c4d4' }}>Proses mudah, cepat, dan aman hanya dalam 3 langkah</p>
           </div>
-
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              {
-                step: '01',
-                title: 'Pilih Game & Nominal',
-                desc: 'Pilih game favoritmu dan nominal yang ingin dibeli dari katalog lengkap ThreeTop.',
-                color: 'sky',
-              },
-              {
-                step: '02',
-                title: 'Masukkan ID & Bayar',
-                desc: 'Masukkan User ID game kamu, pilih metode pembayaran (QRIS, VA, e-wallet), dan selesaikan pembayaran.',
-                color: 'violet',
-              },
-              {
-                step: '03',
-                title: 'Item Langsung Masuk',
-                desc: 'Diamond, UC, VP, atau item lainnya langsung masuk ke akun game kamu dalam hitungan detik.',
-                color: 'emerald',
-              },
+              { step: '01', title: 'Pilih Game & Nominal', desc: 'Pilih game favoritmu dan nominal dari katalog lengkap ThreeTop.' },
+              { step: '02', title: 'Masukkan ID & Bayar', desc: 'Masukkan User ID, pilih metode pembayaran, dan selesaikan pembayaran.' },
+              { step: '03', title: 'Item Langsung Masuk', desc: 'Diamond, UC, VP langsung masuk ke akun game kamu dalam hitungan detik.' },
             ].map((item) => (
-              <div key={item.step}
-                className="rounded-2xl border border-[#243558]/50 p-6 relative overflow-hidden"
-                style={{ background: 'rgba(10,16,32,0.8)' }}>
-                <div className={`absolute top-4 right-4 text-5xl font-black text-${item.color}-500/10`}>
-                  {item.step}
+              <div key={item.step} className="rounded-lg p-6 relative overflow-hidden"
+                style={{ border: '1px solid #1e2d4a', background: '#111827' }}>
+                <div className="absolute top-4 right-4 text-5xl font-black" style={{ color: 'rgba(228,240,246,0.04)' }}>{item.step}</div>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
+                  style={{ background: 'rgba(228,240,246,0.08)', border: '1px solid rgba(228,240,246,0.15)' }}>
+                  <span className="text-sm font-bold" style={{ color: '#e4f0f6' }}>{item.step}</span>
                 </div>
-                <div className={`w-10 h-10 rounded-xl bg-${item.color}-500/10 border border-${item.color}-500/20 flex items-center justify-center mb-4`}>
-                  <span className={`text-${item.color}-400 text-sm font-bold`}>{item.step}</span>
-                </div>
-                <h3 className="text-white font-semibold mb-2">{item.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                <h3 className="font-semibold mb-2" style={{ color: '#e4f0f6' }}>{item.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: '#a8c4d4' }}>{item.desc}</p>
               </div>
             ))}
           </div>
@@ -202,60 +178,29 @@ export default async function HomePage() {
       </section>
 
       {/* Keunggulan */}
-      <section id="keunggulan" className="py-20 border-t border-[#1a2844]/40">
+      <section id="keunggulan" className="py-20" style={{ borderTop: '1px solid #1e2d4a' }}>
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-3">Kenapa ThreeTop?</h2>
-            <p className="text-slate-400">Dipercaya oleh ribuan gamer Indonesia</p>
+            <h2 className="text-3xl font-bold mb-3" style={{ color: '#e4f0f6' }}>Kenapa ThreeTop?</h2>
+            <p style={{ color: '#a8c4d4' }}>Dipercaya oleh ribuan gamer Indonesia</p>
           </div>
-
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              {
-                icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
-                title: 'Proses Instan',
-                desc: 'Transaksi diproses secara otomatis. Item langsung masuk tanpa perlu menunggu lama.',
-                color: 'sky',
-              },
-              {
-                icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
-                title: 'Harga Terbaik',
-                desc: 'Harga kompetitif langsung dari supplier resmi tanpa biaya tersembunyi.',
-                color: 'emerald',
-              },
-              {
-                icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>,
-                title: 'Aman & Terpercaya',
-                desc: 'Pembayaran diproses oleh Midtrans berlisensi Bank Indonesia. Data kamu aman.',
-                color: 'violet',
-              },
-              {
-                icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>,
-                title: 'Banyak Metode Bayar',
-                desc: 'QRIS, Virtual Account, GoPay, OVO, Dana, dan metode pembayaran lainnya.',
-                color: 'amber',
-              },
-              {
-                icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>,
-                title: 'Riwayat Lengkap',
-                desc: 'Pantau seluruh riwayat transaksi kamu kapan saja dari dashboard pengguna.',
-                color: 'rose',
-              },
-              {
-                icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>,
-                title: 'Support 24/7',
-                desc: 'Tim customer service siap membantu kamu setiap hari, kapan pun kamu butuhkan.',
-                color: 'sky',
-              },
+              { title: 'Proses Instan', desc: 'Transaksi diproses otomatis. Item langsung masuk tanpa menunggu.' },
+              { title: 'Harga Terbaik', desc: 'Harga kompetitif dari supplier resmi tanpa biaya tersembunyi.' },
+              { title: 'Aman & Terpercaya', desc: 'Pembayaran via Midtrans berlisensi Bank Indonesia.' },
+              { title: 'Banyak Metode Bayar', desc: 'QRIS, Virtual Account, GoPay, OVO, Dana, dan lainnya.' },
+              { title: 'Riwayat Lengkap', desc: 'Pantau seluruh transaksi dari dashboard kapan saja.' },
+              { title: 'Support 24/7', desc: 'Tim siap membantu setiap hari, kapanpun kamu butuhkan.' },
             ].map((item) => (
-              <div key={item.title}
-                className="rounded-2xl border border-[#243558]/50 p-6"
-                style={{ background: 'rgba(10,16,32,0.8)' }}>
-                <div className={`w-12 h-12 rounded-xl bg-${item.color}-500/10 border border-${item.color}-500/20 flex items-center justify-center mb-4 text-${item.color}-400`}>
-                  {item.icon}
+              <div key={item.title} className="rounded-lg p-6"
+                style={{ border: '1px solid #1e2d4a', background: '#111827' }}>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
+                  style={{ background: 'rgba(228,240,246,0.08)', border: '1px solid rgba(228,240,246,0.15)' }}>
+                  <div className="w-4 h-4 rounded-full" style={{ background: '#e4f0f6' }} />
                 </div>
-                <h3 className="text-white font-semibold mb-2">{item.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                <h3 className="font-semibold mb-2" style={{ color: '#e4f0f6' }}>{item.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: '#a8c4d4' }}>{item.desc}</p>
               </div>
             ))}
           </div>
@@ -263,42 +208,34 @@ export default async function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 border-t border-[#1a2844]/40">
+      <section className="py-20" style={{ borderTop: '1px solid #1e2d4a' }}>
         <div className="max-w-2xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Siap Top Up Sekarang?</h2>
-          <p className="text-slate-400 mb-8">
-            {isLoggedIn
-              ? 'Kamu sudah masuk. Langsung top up game favoritmu dari dashboard.'
-              : 'Daftar gratis dan nikmati pengalaman top up game yang mudah, cepat, dan aman bersama ThreeTop.'}
+          <h2 className="text-3xl font-bold mb-4" style={{ color: '#e4f0f6' }}>Siap Top Up Sekarang?</h2>
+          <p className="mb-8" style={{ color: '#a8c4d4' }}>
+            {isLoggedIn ? 'Kamu sudah masuk. Langsung top up dari dashboard.' : 'Daftar gratis dan mulai top up game favoritmu.'}
           </p>
-          <Link
-            href={isLoggedIn ? '/dashboard/topup' : '/auth/register'}
-            className="inline-block px-10 py-4 rounded-xl text-base font-semibold text-white transition-all hover:scale-105"
-            style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: '0 0 24px rgba(14,165,233,0.4)' }}>
+          <Link href={isLoggedIn ? '/dashboard/topup' : '/auth/register'}
+            className="inline-block px-10 py-4 rounded-lg text-base font-semibold transition-all hover:opacity-90"
+            style={{ background: '#e4f0f6', color: '#0a0f1e' }}>
             {isLoggedIn ? 'Top Up Sekarang' : 'Daftar Gratis Sekarang'}
           </Link>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#1a2844]/60 py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md bg-sky-500 flex items-center justify-center">
-                <img src="/threetop-32x32.png" alt="ThreeTop" />
-              </div>
-              <span className="text-sm font-black text-white">THREE<span className="text-sky-400">TOP</span></span>
-            </div>
-            <div className="flex items-center gap-5 text-xs text-slate-500">
-              <a href="/terms" className="hover:text-slate-300 transition-colors">Syarat &amp; Ketentuan</a>
-              <a href="/privacy" className="hover:text-slate-300 transition-colors">Kebijakan Privasi</a>
-              <span>© 2025 ThreeTop. All rights reserved.</span>
-            </div>
+      <footer className="py-8" style={{ borderTop: '1px solid #1e2d4a' }}>
+        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <img src="/threetop-32x32.png" alt="ThreeTop" className="w-6 h-6 rounded object-contain" />
+            <span className="text-sm font-black" style={{ color: '#e4f0f6' }}>THREETOP</span>
+          </div>
+          <div className="flex items-center gap-5 text-xs" style={{ color: '#5a8099' }}>
+            <a href="/terms" className="transition-colors hover:opacity-80">Syarat &amp; Ketentuan</a>
+            <a href="/privacy" className="transition-colors hover:opacity-80">Kebijakan Privasi</a>
+            <span>© 2025 ThreeTop.</span>
           </div>
         </div>
       </footer>
-
     </div>
   )
 }

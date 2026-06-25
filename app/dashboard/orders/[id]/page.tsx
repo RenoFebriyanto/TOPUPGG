@@ -14,8 +14,8 @@ const STATUS_CONFIG = {
     icon: <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
   PENDING:    { label: 'Pending',   color: 'text-amber-400',   bg: 'bg-amber-400/10 border-amber-400/20',
     icon: <svg className="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
-  PROCESSING: { label: 'Diproses', color: 'text-sky-400',     bg: 'bg-sky-400/10 border-sky-400/20',
-    icon: <svg className="w-8 h-8 text-sky-400 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg> },
+  PROCESSING: { label: 'Diproses', color: 'text-[#e4f0f6]',     bg: 'bg-sky-400/10 border-sky-400/20',
+    icon: <svg className="w-8 h-8 text-[#e4f0f6] animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg> },
 } as const
 
 function formatCurrency(n: number) {
@@ -70,7 +70,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
       </div>
 
       {/* Detail card */}
-      <div className="rounded-lg border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(17,24,39,0.8)' }}>
+      <div className="rounded-lg border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(10,15,30,0.85)' }}>
         {/* Game header */}
         <div className="flex items-center gap-3 px-6 py-4 border-b border-[#1e2d4a]/60">
           <div className="w-10 h-10 rounded-lg overflow-hidden bg-[#111827] shrink-0 flex items-center justify-center">
@@ -103,7 +103,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
               <div className="flex items-center gap-2 min-w-0">
                 <span className={`text-sm font-medium text-right break-all ${
                   (item as { success?: boolean }).success ? 'text-emerald-400 font-mono' :
-                  (item as { highlight?: boolean }).highlight ? 'text-sky-400 font-bold text-base' :
+                  (item as { highlight?: boolean }).highlight ? 'text-[#e4f0f6] font-bold text-base' :
                   (item as { mono?: boolean }).mono ? 'text-[#e4f0f6] font-mono text-xs' :
                   'text-[#e4f0f6]'
                 }`}>
@@ -122,7 +122,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
       {order.paymentStatus === 'UNPAID' && order.paymentUrl && (
         <a href={order.paymentUrl} target="_blank" rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.02]"
-          style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: '0 0 20px rgba(14,165,233,0.3)' }}>
+          style={{ background: '#e4f0f6', boxShadow: '0 0 20px rgba(14,165,233,0.3)' }}>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
           </svg>
@@ -134,12 +134,12 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
       <div className="flex gap-3">
         <Link href="/dashboard/orders"
           className="flex-1 py-3 rounded-xl text-sm font-medium text-center border border-slate-700/50 text-slate-400 hover:text-white hover:border-slate-600 transition-colors"
-          style={{ background: 'rgba(15,20,35,0.6)' }}>
+          style={{ background: 'rgba(10,15,30,0.85)' }}>
           Lihat Semua Riwayat
         </Link>
         <Link href="/dashboard/topup"
           className="flex-1 py-3 rounded-xl text-sm font-semibold text-center text-white"
-          style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)' }}>
+          style={{ background: '#e4f0f6' }}>
           Top Up Lagi
         </Link>
       </div>

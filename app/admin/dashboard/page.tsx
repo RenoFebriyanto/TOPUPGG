@@ -20,7 +20,7 @@ const STATUS_CONFIG = {
   SUCCESS:    { label: 'Sukses',    color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-400/20' },
   FAILED:     { label: 'Gagal',     color: 'text-red-400',     bg: 'bg-red-400/10 border-red-400/20' },
   PENDING:    { label: 'Pending',   color: 'text-amber-400',   bg: 'bg-amber-400/10 border-amber-400/20' },
-  PROCESSING: { label: 'Diproses', color: 'text-sky-400',     bg: 'bg-sky-400/10 border-sky-400/20' },
+  PROCESSING: { label: 'Diproses', color: 'text-[#e4f0f6]',     bg: 'bg-sky-400/10 border-sky-400/20' },
 } as const
 
 export default async function AdminDashboardPage() {
@@ -75,7 +75,7 @@ export default async function AdminDashboardPage() {
   ]
 
   const accentMap: Record<string, { icon: string; border: string }> = {
-    sky:     { icon: 'text-sky-400 bg-sky-400/10',     border: 'border-sky-500/20' },
+    sky:     { icon: 'text-[#e4f0f6] bg-sky-400/10',     border: 'border-sky-500/20' },
     violet:  { icon: 'text-violet-400 bg-violet-400/10', border: 'border-violet-500/20' },
     emerald: { icon: 'text-emerald-400 bg-emerald-400/10', border: 'border-emerald-500/20' },
     amber:   { icon: 'text-amber-400 bg-amber-400/10',  border: 'border-amber-500/20' },
@@ -113,7 +113,7 @@ export default async function AdminDashboardPage() {
         {statCards.map((card) => {
           const colors = accentMap[card.accent]
           return (
-            <div key={card.label} className={`rounded-lg border ${colors.border} p-5`} style={{ background: 'rgba(17,24,39,0.8)' }}>
+            <div key={card.label} className={`rounded-lg border ${colors.border} p-5`} style={{ background: 'rgba(10,15,30,0.85)' }}>
               <div className="flex items-start justify-between mb-3">
                 <p className="text-[#a8c4d4] text-xs font-medium">{card.label}</p>
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${colors.icon}`}>{card.icon}</div>
@@ -129,7 +129,7 @@ export default async function AdminDashboardPage() {
       <div className="grid lg:grid-cols-3 gap-6">
 
         {/* Status breakdown */}
-        <div className="rounded-lg border border-[#1e2d4a]/50 p-6 space-y-4" style={{ background: 'rgba(17,24,39,0.8)' }}>
+        <div className="rounded-lg border border-[#1e2d4a]/50 p-6 space-y-4" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <h2 className="text-white font-semibold">Status Transaksi</h2>
           {[
             { label: 'Sukses', count: successOrders, color: 'bg-emerald-400' },
@@ -155,7 +155,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         {/* Recent orders */}
-        <div className="lg:col-span-2 rounded-lg border border-[#1e2d4a]/50 p-6" style={{ background: 'rgba(17,24,39,0.8)' }}>
+        <div className="lg:col-span-2 rounded-lg border border-[#1e2d4a]/50 p-6" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-white font-semibold">Transaksi Terbaru</h2>
             <Link href="/admin/orders" className="text-violet-400 text-sm hover:text-violet-300 transition-colors">Lihat semua →</Link>
@@ -193,7 +193,7 @@ export default async function AdminDashboardPage() {
           { label: 'Kelola Transaksi', href: '/admin/orders',   color: 'border-violet-500/20 hover:border-violet-500/40',
             icon: <svg className="w-6 h-6 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg> },
           { label: 'Kelola User',       href: '/admin/users',    color: 'border-sky-500/20 hover:border-sky-500/40',
-            icon: <svg className="w-6 h-6 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg> },
+            icon: <svg className="w-6 h-6 text-[#e4f0f6]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg> },
           { label: 'Daftar Produk',     href: '/admin/products', color: 'border-emerald-500/20 hover:border-emerald-500/40',
             icon: <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg> },
           { label: 'Dashboard User',    href: '/dashboard',      color: 'border-[#1e2d4a]/40 hover:border-slate-600/60',
@@ -201,7 +201,7 @@ export default async function AdminDashboardPage() {
         ].map((item) => (
           <Link key={item.href} href={item.href}
             className={`rounded-lg border p-4 flex flex-col items-center gap-2 text-center transition-all duration-200 hover:-translate-y-0.5 ${item.color}`}
-            style={{ background: 'rgba(17,24,39,0.8)' }}
+            style={{ background: 'rgba(10,15,30,0.85)' }}
           >
             {item.icon}
             <span className="text-[#e4f0f6] text-xs font-medium">{item.label}</span>
@@ -210,7 +210,7 @@ export default async function AdminDashboardPage() {
       </div>
       {/* Revenue per game */}
       {revenueByGame.length > 0 && (
-        <div className="rounded-lg border border-[#1e2d4a]/50 p-6" style={{ background: 'rgba(17,24,39,0.8)' }}>
+        <div className="rounded-lg border border-[#1e2d4a]/50 p-6" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <h2 className="text-white font-semibold mb-5">Revenue per Game</h2>
           <div className="space-y-4">
             {revenueByGame.map((item) => {

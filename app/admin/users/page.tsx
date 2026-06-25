@@ -66,7 +66,7 @@ export default async function AdminUsersPage({
       </form>
 
       {/* Table */}
-      <div className="rounded-lg border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(17,24,39,0.8)' }}>
+      <div className="rounded-lg border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(10,15,30,0.85)' }}>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>

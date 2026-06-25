@@ -209,9 +209,9 @@ export default function GameTopUpPage() {
   if (error) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="rounded-xl border border-red-500/20 p-8 text-center" style={{ background: 'rgba(17,24,39,0.8)' }}>
+        <div className="rounded-xl border border-red-500/20 p-8 text-center" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <p className="text-red-400 text-sm mb-4">{error}</p>
-          <button onClick={fetchProducts} className="px-4 py-2 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 text-sm hover:bg-sky-500/20 transition-colors">Coba Lagi</button>
+          <button onClick={fetchProducts} className="px-4 py-2 rounded-xl bg-sky-500/10 border border-sky-500/20 text-[#e4f0f6] text-sm hover:bg-sky-500/20 transition-colors">Coba Lagi</button>
         </div>
       </div>
     )
@@ -223,7 +223,7 @@ export default function GameTopUpPage() {
     const isPending = orderResult.status === 'PROCESSING'
     return (
       <div className="max-w-md mx-auto">
-        <div className="rounded-xl border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(17,24,39,0.8)' }}>
+        <div className="rounded-xl border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <div className={`p-6 text-center border-b ${isSuccess ? 'bg-emerald-500/10 border-emerald-500/20' : isPending ? 'bg-amber-500/10 border-amber-500/20' : 'bg-red-500/10 border-red-500/20'}`}>
             <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ${isSuccess ? 'bg-emerald-500/20' : isPending ? 'bg-amber-500/20' : 'bg-red-500/20'}`}>
               {isSuccess ? <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
@@ -243,7 +243,7 @@ export default function GameTopUpPage() {
             ))}
           </div>
           <div className="p-6 pt-0 flex gap-3">
-            <button onClick={handleReset} className="flex-1 py-3 rounded-xl text-sm font-semibold bg-sky-500/10 border border-sky-500/20 text-sky-400 hover:bg-sky-500/20 transition-colors">Top Up Lagi</button>
+            <button onClick={handleReset} className="flex-1 py-3 rounded-xl text-sm font-semibold bg-sky-500/10 border border-sky-500/20 text-[#e4f0f6] hover:bg-sky-500/20 transition-colors">Top Up Lagi</button>
             <Link href="/dashboard/orders" className="flex-1 py-3 rounded-xl text-sm font-semibold text-center bg-[#111827]/60 border border-[#1e2d4a]/50 text-[#e4f0f6] hover:bg-slate-800 transition-colors">Lihat Riwayat</Link>
           </div>
         </div>
@@ -255,9 +255,9 @@ export default function GameTopUpPage() {
   if (step === 'processing') {
     return (
       <div className="max-w-md mx-auto">
-        <div className="rounded-xl border border-[#1e2d4a]/50 p-12 flex flex-col items-center text-center" style={{ background: 'rgba(17,24,39,0.8)' }}>
+        <div className="rounded-xl border border-[#1e2d4a]/50 p-12 flex flex-col items-center text-center" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <div className="w-16 h-16 rounded-full bg-sky-500/10 border border-sky-500/20 flex items-center justify-center mb-4">
-            <svg className="animate-spin w-8 h-8 text-sky-400" fill="none" viewBox="0 0 24 24">
+            <svg className="animate-spin w-8 h-8 text-[#e4f0f6]" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
@@ -284,7 +284,7 @@ export default function GameTopUpPage() {
       </div>
 
       {/* Game header */}
-      <div className="rounded-xl border border-[#1e2d4a]/50 p-6 flex items-center gap-4" style={{ background: 'rgba(17,24,39,0.8)' }}>
+      <div className="rounded-xl border border-[#1e2d4a]/50 p-6 flex items-center gap-4" style={{ background: 'rgba(10,15,30,0.85)' }}>
         <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${gameInfo.color} flex items-center justify-center shrink-0 overflow-hidden`}>
           <GameIcon image={gameInfo.image} fallback={gameInfo.icon} label={gameInfo.label} size={48} className="rounded-xl" />
         </div>
@@ -296,10 +296,10 @@ export default function GameTopUpPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-white font-semibold"><span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold mr-2">1</span>Pilih Nominal</h2>
-            {step !== 'select' && <button onClick={() => { setStep('select'); setSelectedProduct(null) }} className="text-sky-400 text-sm hover:text-sky-300 transition-colors">Ubah</button>}
+            {step !== 'select' && <button onClick={() => { setStep('select'); setSelectedProduct(null) }} className="text-[#e4f0f6] text-sm hover:text-[#e4f0f6] transition-colors">Ubah</button>}
           </div>
           {products.length === 0 ? (
-            <div className="rounded-xl border border-[#1e2d4a]/50 p-8 text-center" style={{ background: 'rgba(17,24,39,0.8)' }}><p className="text-[#a8c4d4] text-sm">Tidak ada produk tersedia saat ini.</p></div>
+            <div className="rounded-xl border border-[#1e2d4a]/50 p-8 text-center" style={{ background: 'rgba(10,15,30,0.85)' }}><p className="text-[#a8c4d4] text-sm">Tidak ada produk tersedia saat ini.</p></div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {products.map((product) => {
@@ -307,10 +307,10 @@ export default function GameTopUpPage() {
                 return (
                   <button key={product.buyer_sku_code} onClick={() => step === 'select' && handleSelectProduct(product)} disabled={step !== 'select'}
                     className={`relative rounded-xl border p-4 text-left transition-all duration-150 ${isSelected ? 'border-sky-500/60 bg-sky-500/10' : step === 'select' ? 'border-[#1e2d4a]/50 hover:border-slate-500/60 hover:bg-[#111827]/40 cursor-pointer' : 'border-[#1e2d4a]/40 opacity-40 cursor-default'}`}
-                    style={{ background: isSelected ? undefined : 'rgba(17,24,39,0.8)' }}>
+                    style={{ background: isSelected ? undefined : 'rgba(10,15,30,0.85)' }}>
                     {isSelected && <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-sky-500 flex items-center justify-center"><svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg></div>}
                     <p className="text-white font-semibold text-sm leading-tight">{product.product_name}</p>
-                    <p className="text-sky-400 font-bold text-base mt-1">{formatCurrency(product.price)}</p>
+                    <p className="text-[#e4f0f6] font-bold text-base mt-1">{formatCurrency(product.price)}</p>
                   </button>
                 )
               })}
@@ -321,10 +321,10 @@ export default function GameTopUpPage() {
 
       {/* Step 2 — Input ID */}
       {(step === 'input' || step === 'confirm') && selectedProduct && (
-        <div className="rounded-xl border border-[#1e2d4a]/50 p-6 space-y-4" style={{ background: 'rgba(17,24,39,0.8)' }}>
+        <div className="rounded-xl border border-[#1e2d4a]/50 p-6 space-y-4" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <div className="flex items-center justify-between">
             <h2 className="text-white font-semibold"><span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold mr-2">2</span>Masukkan {gameInfo.userIdLabel}</h2>
-            {step === 'confirm' && <button onClick={() => setStep('input')} className="text-sky-400 text-sm hover:text-sky-300 transition-colors">Ubah</button>}
+            {step === 'confirm' && <button onClick={() => setStep('input')} className="text-[#e4f0f6] text-sm hover:text-[#e4f0f6] transition-colors">Ubah</button>}
           </div>
           {step === 'input' ? (
             <div className="space-y-4">
@@ -381,7 +381,7 @@ export default function GameTopUpPage() {
               {inputError && <p className="text-red-400 text-sm">{inputError}</p>}
               <button onClick={handleInputSubmit} disabled={!nickChecked}
                 className="w-full py-3 rounded-xl font-semibold text-sm text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                style={{ background: nickChecked ? 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)' : 'rgba(14,165,233,0.2)', boxShadow: nickChecked ? '0 0 20px rgba(14,165,233,0.3)' : 'none' }}>
+                style={{ background: nickChecked ? '#e4f0f6' : 'rgba(14,165,233,0.2)', boxShadow: nickChecked ? '0 0 20px rgba(14,165,233,0.3)' : 'none' }}>
                 Lanjutkan
               </button>
             </div>
@@ -399,7 +399,7 @@ export default function GameTopUpPage() {
 
       {/* Step 3 — Konfirmasi & Bayar */}
       {step === 'confirm' && selectedProduct && (
-        <div className="rounded-xl border border-[#1e2d4a]/50 p-6 space-y-4" style={{ background: 'rgba(17,24,39,0.8)' }}>
+        <div className="rounded-xl border border-[#1e2d4a]/50 p-6 space-y-4" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <h2 className="text-white font-semibold"><span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold mr-2">3</span>Konfirmasi &amp; Pembayaran</h2>
           <div className="rounded-xl border border-[#1e2d4a]/40 overflow-hidden">
             {[
@@ -411,7 +411,7 @@ export default function GameTopUpPage() {
             ].map((item) => (
               <div key={item.label} className={`flex justify-between items-center px-4 py-3 border-b border-slate-800/60 last:border-0 ${'highlight' in item && item.highlight ? 'bg-sky-500/5' : ''}`}>
                 <span className="text-[#a8c4d4] text-sm">{item.label}</span>
-                <span className={`text-sm font-semibold ${'highlight' in item && item.highlight ? 'text-sky-400 text-base' : 'text-white'}`}>{item.value}</span>
+                <span className={`text-sm font-semibold ${'highlight' in item && item.highlight ? 'text-[#e4f0f6] text-base' : 'text-white'}`}>{item.value}</span>
               </div>
             ))}
           </div>
@@ -421,7 +421,7 @@ export default function GameTopUpPage() {
           <p className="text-[#5a8099] text-xs">Pastikan ID sudah benar. Transaksi yang sudah diproses tidak dapat dibatalkan.</p>
           <button onClick={handleConfirm} disabled={creating}
             className="w-full py-3.5 rounded-xl font-semibold text-sm text-white transition-all disabled:opacity-60"
-            style={{ background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', boxShadow: '0 0 20px rgba(14,165,233,0.3)' }}>
+            style={{ background: '#e4f0f6', boxShadow: '0 0 20px rgba(14,165,233,0.3)' }}>
             {creating ? (
               <span className="flex items-center justify-center gap-2">
                 <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>

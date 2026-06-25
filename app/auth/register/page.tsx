@@ -90,7 +90,7 @@ export default function RegisterPage() {
             className="text-2xl font-black tracking-tight text-[#e4f0f6]"
             style={{ fontFamily: "'Rajdhani', 'Bebas Neue', sans-serif", letterSpacing: '-0.02em' }}
           >
-            THREE<span className="text-sky-400">TOP</span>
+            THREE<span className="text-[#e4f0f6]">TOP</span>
           </span>
         </div>
         <h1 className="text-2xl font-bold text-[#e4f0f6] mb-1">Buat Akun Baru</h1>
@@ -101,7 +101,7 @@ export default function RegisterPage() {
       <div
         className="rounded-lg p-8 border border-[#1e2d4a]/50 shadow-2xl"
         style={{
-          background: 'linear-gradient(135deg, rgba(10,15,30,0.95) 0%, rgba(17,24,39,0.98) 100%)',
+          background: 'linear-gradient(135deg, rgba(10,15,30,0.95) 0%, rgba(10,15,30,0.85) 100%)',
           backdropFilter: 'blur(20px)',
         }}
       >
@@ -298,7 +298,7 @@ export default function RegisterPage() {
             style={{
               background: loading
                 ? 'rgba(14,165,233,0.4)'
-                : 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
+                : '#e4f0f6',
               boxShadow: loading ? 'none' : '0 0 20px rgba(14,165,233,0.3)',
             }}
           >
@@ -328,7 +328,7 @@ export default function RegisterPage() {
           Sudah punya akun?{' '}
           <Link
             href="/auth/login"
-            className="text-sky-400 hover:text-sky-300 font-medium transition-colors"
+            className="text-[#e4f0f6] hover:text-[#e4f0f6] font-medium transition-colors"
           >
             Login sekarang
           </Link>

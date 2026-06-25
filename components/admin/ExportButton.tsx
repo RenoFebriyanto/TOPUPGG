@@ -80,7 +80,7 @@ export default function AdminExportButton() {
           <div className="fixed inset-0 z-10" onClick={() => { setOpen(false); setShowDateFilter(false) }} />
           <div
             className="absolute right-0 top-11 z-20 w-64 rounded-lg border border-slate-700/60 overflow-hidden shadow-2xl"
-            style={{ background: 'rgba(15,20,35,0.98)' }}
+            style={{ background: 'rgba(10,15,30,0.85)' }}
           >
             {/* Filter tanggal */}
             <div className="p-3 border-b border-[#1e2d4a]/60">

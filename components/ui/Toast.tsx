@@ -37,7 +37,7 @@ const ICONS: Record<ToastType, React.ReactNode> = {
     </svg>
   ),
   info: (
-    <svg className="w-4 h-4 text-sky-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+    <svg className="w-4 h-4 text-[#e4f0f6] shrink-0" fill="currentColor" viewBox="0 0 20 20">
       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clipRule="evenodd" />
     </svg>
   ),
@@ -47,7 +47,7 @@ const STYLES: Record<ToastType, string> = {
   success: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
   error:   'border-red-500/30 bg-red-500/10 text-red-300',
   warning: 'border-amber-500/30 bg-amber-500/10 text-amber-300',
-  info:    'border-sky-500/30 bg-sky-500/10 text-sky-300',
+  info:    'border-sky-500/30 bg-sky-500/10 text-[#e4f0f6]',
 }
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {

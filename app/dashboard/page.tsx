@@ -52,7 +52,7 @@ const STATUS_CONFIG = {
   SUCCESS: { label: 'Sukses', color: 'text-emerald-400', bg: 'bg-emerald-400/10 border-emerald-400/20' },
   FAILED: { label: 'Gagal', color: 'text-red-400', bg: 'bg-red-400/10 border-red-400/20' },
   PENDING: { label: 'Pending', color: 'text-amber-400', bg: 'bg-amber-400/10 border-amber-400/20' },
-  PROCESSING: { label: 'Diproses', color: 'text-sky-400', bg: 'bg-sky-400/10 border-sky-400/20' },
+  PROCESSING: { label: 'Diproses', color: 'text-[#e4f0f6]', bg: 'bg-sky-400/10 border-sky-400/20' },
 } as const
 
 function formatCurrency(amount: number) {
@@ -136,7 +136,7 @@ export default async function DashboardPage() {
   ]
 
   const accentColors: Record<string, { icon: string; glow: string; border: string }> = {
-    sky: { icon: 'text-sky-400 bg-sky-400/10', glow: 'shadow-sky-500/10', border: 'border-sky-500/20' },
+    sky: { icon: 'text-[#e4f0f6] bg-sky-400/10', glow: 'shadow-sky-500/10', border: 'border-sky-500/20' },
     emerald: { icon: 'text-emerald-400 bg-emerald-400/10', glow: 'shadow-emerald-500/10', border: 'border-emerald-500/20' },
     amber: { icon: 'text-amber-400 bg-amber-400/10', glow: 'shadow-amber-500/10', border: 'border-amber-500/20' },
     violet: { icon: 'text-violet-400 bg-violet-400/10', glow: 'shadow-violet-500/10', border: 'border-violet-500/20' },
@@ -159,7 +159,7 @@ export default async function DashboardPage() {
           <div>
             <p className="text-[#a8c4d4] text-sm mb-1">Selamat datang kembali</p>
             <h1 className="text-2xl lg:text-3xl font-bold text-[#e4f0f6]">
-              Halo, <span className="text-sky-400">{firstName}!</span>
+              Halo, <span className="text-[#e4f0f6]">{firstName}!</span>
             </h1>
             <p className="text-[#a8c4d4] text-sm mt-2">
               Siap top up game hari ini? Proses instan, harga terbaik.
@@ -169,7 +169,7 @@ export default async function DashboardPage() {
             href="/dashboard/topup"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm text-[#e4f0f6] shrink-0 transition-all duration-200 hover:scale-105"
             style={{
-              background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
+              background: '#e4f0f6',
               boxShadow: '0 0 20px rgba(14,165,233,0.3)',
             }}
           >
@@ -189,7 +189,7 @@ export default async function DashboardPage() {
             <div
               key={card.label}
               className={`rounded-lg border ${colors.border} p-5 shadow-lg ${colors.glow}`}
-              style={{ background: 'rgba(17,24,39,0.8)' }}
+              style={{ background: 'rgba(10,15,30,0.85)' }}
             >
               <div className="flex items-start justify-between mb-3">
                 <p className="text-[#a8c4d4] text-xs font-medium leading-tight">{card.label}</p>
@@ -212,10 +212,10 @@ export default async function DashboardPage() {
       <div className="grid lg:grid-cols-5 gap-6">
 
         {/* Popular Games */}
-        <div className="lg:col-span-3 rounded-lg border border-[#1e2d4a] p-6" style={{ background: 'rgba(17,24,39,0.8)' }}>
+        <div className="lg:col-span-3 rounded-lg border border-[#1e2d4a] p-6" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-[#e4f0f6] font-semibold text-lg">Game Populer</h2>
-            <Link href="/dashboard/topup" className="text-sky-400 text-sm hover:text-sky-300 transition-colors">
+            <Link href="/dashboard/topup" className="text-[#e4f0f6] text-sm hover:text-[#e4f0f6] transition-colors">
               Lihat semua →
             </Link>
           </div>
@@ -240,10 +240,10 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent Orders */}
-        <div className="lg:col-span-2 rounded-lg border border-[#1e2d4a] p-6" style={{ background: 'rgba(17,24,39,0.8)' }}>
+        <div className="lg:col-span-2 rounded-lg border border-[#1e2d4a] p-6" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-[#e4f0f6] font-semibold text-lg">Transaksi Terbaru</h2>
-            <Link href="/dashboard/orders" className="text-sky-400 text-sm hover:text-sky-300 transition-colors">
+            <Link href="/dashboard/orders" className="text-[#e4f0f6] text-sm hover:text-[#e4f0f6] transition-colors">
               Lihat semua →
             </Link>
           </div>
@@ -259,7 +259,7 @@ export default async function DashboardPage() {
               <p className="text-[#3d5a73] text-xs mt-1">Mulai top up game pertamamu!</p>
               <Link
                 href="/dashboard/topup"
-                className="mt-4 px-4 py-2 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-medium hover:bg-sky-500/20 transition-colors"
+                className="mt-4 px-4 py-2 rounded-lg bg-sky-500/10 border border-sky-500/20 text-[#e4f0f6] text-xs font-medium hover:bg-sky-500/20 transition-colors"
               >
                 Top Up Sekarang
               </Link>
@@ -299,9 +299,9 @@ export default async function DashboardPage() {
       </div>
 
       {/* Info Banner */}
-      <div className="rounded-lg border border-[#1e2d4a]/30 p-5 flex items-start gap-4" style={{ background: 'rgba(17,24,39,0.6)' }}>
+      <div className="rounded-lg border border-[#1e2d4a]/30 p-5 flex items-start gap-4" style={{ background: 'rgba(10,15,30,0.85)' }}>
         <div className="w-10 h-10 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center shrink-0">
-          <svg className="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-[#e4f0f6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>

@@ -41,7 +41,7 @@ export default function EditNameForm({ currentName }: { currentName: string }) {
     return (
       <button
         onClick={() => setEditing(true)}
-        className="inline-flex items-center gap-1.5 text-xs text-[#5a8099] hover:text-sky-400 transition-colors mt-1"
+        className="inline-flex items-center gap-1.5 text-xs text-[#5a8099] hover:text-[#e4f0f6] transition-colors mt-1"
       >
         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -66,7 +66,7 @@ export default function EditNameForm({ currentName }: { currentName: string }) {
         <button
           onClick={handleSave}
           disabled={loading}
-          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-sky-500/20 border border-sky-500/30 text-sky-400 hover:bg-sky-500/30 transition-colors disabled:opacity-50"
+          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-sky-500/20 border border-sky-500/30 text-[#e4f0f6] hover:bg-sky-500/30 transition-colors disabled:opacity-50"
         >
           {loading ? '...' : 'Simpan'}
         </button>

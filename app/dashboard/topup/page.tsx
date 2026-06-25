@@ -58,9 +58,9 @@ export default function TopUpPage() {
 
       {/* Grid */}
       {filtered.length === 0 ? (
-        <div className="rounded-lg border border-[#1e2d4a]/50 p-12 text-center" style={{ background: 'rgba(17,24,39,0.8)' }}>
+        <div className="rounded-lg border border-[#1e2d4a]/50 p-12 text-center" style={{ background: 'rgba(10,15,30,0.85)' }}>
           <p className="text-[#a8c4d4] text-sm">Game &quot;{query}&quot; tidak ditemukan.</p>
-          <button onClick={() => setQuery('')} className="mt-3 text-sky-400 text-xs hover:text-sky-300 transition-colors">
+          <button onClick={() => setQuery('')} className="mt-3 text-[#e4f0f6] text-xs hover:text-[#e4f0f6] transition-colors">
             Reset pencarian
           </button>
         </div>
@@ -70,7 +70,7 @@ export default function TopUpPage() {
             <Link key={key} href={`/dashboard/topup/${key}`}
               className="group relative rounded-lg overflow-hidden border border-[#1e2d4a]/50 hover:border-slate-500/60 transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl">
               <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-20 group-hover:opacity-35 transition-opacity duration-200`} />
-              <div className="relative p-6 flex flex-col gap-4" style={{ background: 'rgba(15,20,35,0.85)' }}>
+              <div className="relative p-6 flex flex-col gap-4" style={{ background: 'rgba(10,15,30,0.85)' }}>
                 <div className="flex items-start justify-between">
                   <GameIcon image={game.image} fallback={game.icon} label={game.label} size={48} className="rounded-lg" />
                   <span className="text-xs font-semibold px-2 py-1 rounded-full bg-[#111827]/80 text-[#a8c4d4] border border-[#1e2d4a]/50">
@@ -83,7 +83,7 @@ export default function TopUpPage() {
                     <p className="text-[#5a8099] text-xs mt-1">Top Up Sekarang</p>
                   </div>
                   <div className="w-8 h-8 rounded-full bg-[#111827]/60 border border-[#1e2d4a]/50 flex items-center justify-center group-hover:bg-sky-500/20 group-hover:border-sky-500/40 transition-all shrink-0">
-                    <svg className="w-4 h-4 text-[#5a8099] group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-[#5a8099] group-hover:text-[#e4f0f6] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </div>
@@ -95,9 +95,9 @@ export default function TopUpPage() {
       )}
 
       {/* Info */}
-      <div className="rounded-lg border border-[#1e2d4a]/30 p-5 flex items-start gap-4" style={{ background: 'rgba(17,24,39,0.6)' }}>
+      <div className="rounded-lg border border-[#1e2d4a]/30 p-5 flex items-start gap-4" style={{ background: 'rgba(10,15,30,0.85)' }}>
         <div className="w-10 h-10 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center shrink-0">
-          <svg className="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-[#e4f0f6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>

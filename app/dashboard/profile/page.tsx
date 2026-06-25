@@ -61,7 +61,7 @@ export default async function ProfilePage() {
       </div>
 
       {/* Profile card */}
-      <div className="rounded-lg border border-[#1e2d4a]/50 p-6" style={{ background: 'rgba(17,24,39,0.8)' }}>
+      <div className="rounded-lg border border-[#1e2d4a]/50 p-6" style={{ background: 'rgba(10,15,30,0.85)' }}>
         <div className="flex items-center gap-5">
           <div className="w-20 h-20 rounded-lg overflow-hidden bg-slate-700 shrink-0 flex items-center justify-center">
             {user.image ? (
@@ -95,8 +95,8 @@ export default async function ProfilePage() {
       {/* Stats grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {stats.map((s) => (
-          <div key={s.label} className="rounded-lg border border-[#1e2d4a]/50 p-4 text-center" style={{ background: 'rgba(17,24,39,0.8)' }}>
-            <div className="w-10 h-10 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center mx-auto mb-2 text-sky-400">
+          <div key={s.label} className="rounded-lg border border-[#1e2d4a]/50 p-4 text-center" style={{ background: 'rgba(10,15,30,0.85)' }}>
+            <div className="w-10 h-10 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center mx-auto mb-2 text-[#e4f0f6]">
               {s.icon}
             </div>
             <p className="text-white font-bold text-lg leading-tight">{s.value}</p>
@@ -106,7 +106,7 @@ export default async function ProfilePage() {
       </div>
 
       {/* Account info */}
-      <div className="rounded-lg border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(17,24,39,0.8)' }}>
+      <div className="rounded-lg border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(10,15,30,0.85)' }}>
         <div className="px-6 py-4 border-b border-[#1e2d4a]/60">
           <h3 className="text-white font-semibold">Informasi Akun</h3>
         </div>
@@ -126,10 +126,10 @@ export default async function ProfilePage() {
       </div>
 
       {/* Ubah Password */}
-      <div className="rounded-lg border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(17,24,39,0.8)' }}>
+      <div className="rounded-lg border border-[#1e2d4a]/50 overflow-hidden" style={{ background: 'rgba(10,15,30,0.85)' }}>
         <div className="px-6 py-4 border-b border-[#1e2d4a]/60 flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center shrink-0">
-            <svg className="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-[#e4f0f6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
