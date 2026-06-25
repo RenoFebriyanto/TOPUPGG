@@ -24,7 +24,7 @@ export default function UserRow({ user }: { user: User }) {
 
   return (
     <div className="grid grid-cols-[16rem_7rem_5rem_7rem_9rem_12rem] items-center w-full px-4 py-3 hover:bg-[var(--color-abyss)]/20 transition-colors gap-x-4">
-      <div className="flex items-center gap-3 min-w-0">
+      <div className="flex items-center gap-3 min-w-0 pl-3">
         <div className="w-8 h-8 rounded-full bg-[var(--color-surface-dark)] flex items-center justify-center shrink-0">
           <span className="text-white text-xs font-bold">{user.name?.charAt(0).toUpperCase() ?? '?'}</span>
         </div>
