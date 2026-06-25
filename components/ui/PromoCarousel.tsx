@@ -143,32 +143,15 @@ export default function PromoCarousel({
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
 
           {/* Konten teks */}
-          <Link href={s.href} className="absolute inset-0 flex items-end p-3 sm:p-5 lg:p-7 group">
-            <div className="max-w-[min(100%,360px)]">
+          {/* Top-left badge + slide counter; slide remains clickable */}
+          <Link href={s.href} className="absolute inset-0 flex items-start p-3 sm:p-5 lg:p-7 group" aria-label={s.title}>
+            <div className="flex items-center gap-3">
               {s.badge && (
-                <span className={`inline-block px-2 py-0.5 rounded-full text-white text-[0.65rem] font-bold mb-3 ${s.badgeColor ?? 'bg-[var(--color-info)]'}`}>
+                <span className={`inline-block px-2 py-0.5 rounded-full text-white text-[0.65rem] font-bold ${s.badgeColor ?? 'bg-[var(--color-info)]'}`}>
                   {s.badge}
                 </span>
               )}
-              <h2 className="text-white font-black text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight drop-shadow-lg">
-                {s.title}
-              </h2>
-              {s.subtitle && (
-                <p className="text-white/80 text-[0.75rem] sm:text-sm md:text-base mt-1 drop-shadow">
-                  {s.subtitle}
-                </p>
-              )}
-              {s.cta && (
-                <div className="mt-3">
-                    <span className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-1.5 rounded-lg text-[0.65rem] sm:text-xs md:text-sm font-semibold text-[var(--color-button-text)] transition-all group-hover:gap-2.5"
-                      style={{ background: 'var(--color-button-bg)', boxShadow: '0 0 16px var(--color-accent-loading)' }}>
-                    {s.cta}
-                    <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </span>
-                </div>
-              )}
+              <span className="ml-1 text-[0.65rem] text-[var(--color-muted-strong)] bg-black/40 px-2 py-0.5 rounded-full">{`${current + 1}/${totalSlides}`}</span>
             </div>
           </Link>
         </div>
