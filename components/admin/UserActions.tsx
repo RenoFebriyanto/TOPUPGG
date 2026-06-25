@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function AdminUserActions({
@@ -15,6 +15,8 @@ export default function AdminUserActions({
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [openSuspend, setOpenSuspend] = useState(false)
+  const btnRef = useRef<HTMLButtonElement | null>(null)
+  const [menuStyle, setMenuStyle] = useState<{ top: number; left: number; width: number } | null>(null)
   const [years, setYears] = useState(0)
   const [months, setMonths] = useState(0)
   const [days, setDays] = useState(0)
@@ -68,6 +70,28 @@ export default function AdminUserActions({
     }
   }
 
+  useEffect(() => {
+    if (!openSuspend) {
+      setMenuStyle(null)
+      return
+    }
+    const btn = btnRef.current
+    if (!btn) return
+    const rect = btn.getBoundingClientRect()
+    const viewportWidth = window.innerWidth
+    // desired width: 288px on desktop, up to 320 or viewport-32 on small screens
+    const desiredDesktop = 288
+    const desiredMobile = Math.min(320, viewportWidth - 32)
+    const width = viewportWidth < 640 ? desiredMobile : desiredDesktop
+    let left = rect.left + window.scrollX
+    // prefer aligning to the right of button
+    if (left + width > window.scrollX + viewportWidth - 16) {
+      left = Math.max(window.scrollX + 16, (rect.right + window.scrollX) - width)
+    }
+    const top = rect.bottom + window.scrollY + 8
+    setMenuStyle({ top, left, width })
+  }, [openSuspend])
+
   return (
     <div className="flex items-center gap-2">
       <button
@@ -84,7 +108,8 @@ export default function AdminUserActions({
 
       <div className="relative">
         <button
-          onClick={() => setOpenSuspend(!openSuspend)}
+          ref={btnRef}
+          onClick={() => setOpenSuspend((v) => !v)}
           disabled={loading}
           className="px-2 py-1.5 rounded-lg text-xs font-medium border bg-[var(--color-surface-strong)] border-[var(--color-border)] text-[var(--color-frost)] hover:bg-[var(--color-surface)] transition-colors disabled:opacity-50 whitespace-nowrap"
         >
@@ -93,40 +118,48 @@ export default function AdminUserActions({
 
         {openSuspend && (
           <>
-            <div className="fixed inset-0 z-10" onClick={() => setOpenSuspend(false)} />
-            <div className="absolute right-0 top-10 z-20 w-full sm:w-72 rounded-lg border border-[var(--color-border)] overflow-hidden p-3"
-              style={{ background: 'var(--color-surface-strong)' }}>
+            <div className="fixed inset-0 z-40" onClick={() => setOpenSuspend(false)} />
+            <div
+              className="fixed z-50 rounded-lg border border-[var(--color-border)] overflow-hidden p-3 shadow-2xl"
+              style={{
+                background: 'var(--color-surface-strong)',
+                top: menuStyle ? `${menuStyle.top}px` : undefined,
+                left: menuStyle ? `${menuStyle.left}px` : undefined,
+                width: menuStyle ? `${menuStyle.width}px` : undefined,
+                maxWidth: 'calc(100% - 32px)'
+              }}
+            >
               <div className="text-xs text-[var(--color-muted)] mb-2">Atur durasi (tahun/bulan/hari/jam/menit/detik)</div>
-              <div className="grid grid-cols-3 gap-2 text-xs">
+              <div className="grid sm:grid-cols-3 grid-cols-2 gap-2 text-xs">
                 <label className="flex flex-col">
                   <span className="text-[var(--color-muted)] text-[10px]">Tahun</span>
                   <input type="number" min={0} value={years} onChange={(e) => setYears(parseInt(e.target.value || '0'))}
-                    className="mt-1 px-2 py-1 rounded-md bg-[var(--color-surface-muted)] border border-[var(--color-border)] text-white text-xs" />
+                    className="mt-1 w-full px-2 py-1 rounded-md bg-[var(--color-surface-muted)] border border-[var(--color-border)] text-white text-xs" />
                 </label>
                 <label className="flex flex-col">
                   <span className="text-[var(--color-muted)] text-[10px]">Bulan</span>
                   <input type="number" min={0} value={months} onChange={(e) => setMonths(parseInt(e.target.value || '0'))}
-                    className="mt-1 px-2 py-1 rounded-md bg-[var(--color-surface-muted)] border border-[var(--color-border)] text-white text-xs" />
+                    className="mt-1 w-full px-2 py-1 rounded-md bg-[var(--color-surface-muted)] border border-[var(--color-border)] text-white text-xs" />
                 </label>
                 <label className="flex flex-col">
                   <span className="text-[var(--color-muted)] text-[10px]">Hari</span>
                   <input type="number" min={0} value={days} onChange={(e) => setDays(parseInt(e.target.value || '0'))}
-                    className="mt-1 px-2 py-1 rounded-md bg-[var(--color-surface-muted)] border border-[var(--color-border)] text-white text-xs" />
+                    className="mt-1 w-full px-2 py-1 rounded-md bg-[var(--color-surface-muted)] border border-[var(--color-border)] text-white text-xs" />
                 </label>
                 <label className="flex flex-col">
                   <span className="text-[var(--color-muted)] text-[10px]">Jam</span>
                   <input type="number" min={0} value={hours} onChange={(e) => setHours(parseInt(e.target.value || '0'))}
-                    className="mt-1 px-2 py-1 rounded-md bg-[var(--color-surface-muted)] border border-[var(--color-border)] text-white text-xs" />
+                    className="mt-1 w-full px-2 py-1 rounded-md bg-[var(--color-surface-muted)] border border-[var(--color-border)] text-white text-xs" />
                 </label>
                 <label className="flex flex-col">
                   <span className="text-[var(--color-muted)] text-[10px]">Menit</span>
                   <input type="number" min={0} value={minutes} onChange={(e) => setMinutes(parseInt(e.target.value || '0'))}
-                    className="mt-1 px-2 py-1 rounded-md bg-[var(--color-surface-muted)] border border-[var(--color-border)] text-white text-xs" />
+                    className="mt-1 w-full px-2 py-1 rounded-md bg-[var(--color-surface-muted)] border border-[var(--color-border)] text-white text-xs" />
                 </label>
                 <label className="flex flex-col">
                   <span className="text-[var(--color-muted)] text-[10px]">Detik</span>
                   <input type="number" min={0} value={seconds} onChange={(e) => setSeconds(parseInt(e.target.value || '0'))}
-                    className="mt-1 px-2 py-1 rounded-md bg-[var(--color-surface-muted)] border border-[var(--color-border)] text-white text-xs" />
+                    className="mt-1 w-full px-2 py-1 rounded-md bg-[var(--color-surface-muted)] border border-[var(--color-border)] text-white text-xs" />
                 </label>
               </div>
 
@@ -143,3 +176,4 @@ export default function AdminUserActions({
     </div>
   )
 }
+
