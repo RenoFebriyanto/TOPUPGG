@@ -129,7 +129,7 @@ const SECTIONS = [
     title: '11. Hubungi Kami',
     content: [
       'Jika memiliki pertanyaan atau keluhan terkait syarat dan ketentuan ini, Pengguna dapat menghubungi ThreeTop melalui:',
-      'Email: support@threetop.id',
+      'Email: threetopsupport@gmail.com',
       'Customer Service tersedia Senin – Minggu, pukul 08.00 – 22.00 WIB.',
       'ThreeTop berkomitmen untuk merespons setiap pertanyaan dalam 1×24 jam kerja.',
     ],
@@ -213,8 +213,7 @@ export default function TermsPage() {
                   Kebijakan Privasi
                 </Link>
                 <Link href="/dashboard"
-                  className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:scale-105"
-                  style={{ background: 'var(--color-button-bg)' }}>
+                  className="px-5 py-2.5 rounded-xl text-sm font-semibold text-[var(--color-button-text)] bg-[var(--color-button-bg)] transition-all hover:scale-105">
                   Kembali ke Dashboard
                 </Link>
               </div>

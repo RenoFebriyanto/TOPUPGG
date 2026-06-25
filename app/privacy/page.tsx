@@ -107,7 +107,7 @@ const SECTIONS = [
       'Hak Pembatasan: Pengguna berhak meminta pembatasan pemrosesan data dalam kondisi tertentu.',
       'Hak Portabilitas: Pengguna berhak menerima data yang mereka berikan dalam format yang dapat dibaca mesin.',
       'Hak Keberatan: Pengguna berhak mengajukan keberatan atas pemrosesan data untuk tujuan tertentu.',
-      'Untuk mengajukan permintaan terkait hak-hak di atas, hubungi kami di support@threetop.id.',
+      'Untuk mengajukan permintaan terkait hak-hak di atas, hubungi kami di threetopprivacy@gmail.com.',
     ],
   },
   {
@@ -152,7 +152,7 @@ const SECTIONS = [
     title: '13. Kontak Terkait Privasi',
     content: [
       'Untuk pertanyaan, keluhan, atau permintaan terkait privasi dan perlindungan data, Pengguna dapat menghubungi kami:',
-      'Email: privacy@threetop.id',
+      'Email: threetopprivacy@gmail.com',
       'Subjek email: [PRIVASI] diikuti dengan deskripsi singkat permintaan.',
       'ThreeTop berkomitmen untuk merespons permintaan terkait privasi dalam 5 hari kerja.',
     ],
@@ -233,8 +233,8 @@ export default function PrivacyPage() {
             <div className="rounded-2xl border border-[var(--color-border)] p-6 text-center bg-[var(--color-surface-dark)]">
               <p className="text-[var(--color-muted)] text-sm mb-2">
                 Pertanyaan tentang privasi? Hubungi kami di{' '}
-                <a href="mailto:privacy@threetop.id" className="text-[var(--color-frost)] hover:text-[var(--color-frost)] transition-colors">
-                  privacy@threetop.id
+                <a href="mailto:threetopprivacy@gmail.com" className="text-[var(--color-frost)] hover:text-[var(--color-frost)] transition-colors">
+                  threetopprivacy@gmail.com
                 </a>
               </p>
               <p className="text-[var(--color-muted-strong)] text-xs mb-5">Versi {LAST_UPDATED}</p>
@@ -244,8 +244,7 @@ export default function PrivacyPage() {
                   Syarat &amp; Ketentuan
                 </Link>
                 <Link href="/dashboard"
-                  className="px-5 py-2.5 rounded-xl text-sm font-semibold text-[var(--color-button-text)] transition-all hover:scale-105"
-                  style={{ background: 'var(--color-button-bg)' }}>
+                  className="px-5 py-2.5 rounded-xl text-sm font-semibold text-[var(--color-button-text)] bg-[var(--color-button-bg)] transition-all hover:scale-105">
                   Kembali ke Dashboard
                 </Link>
               </div>
