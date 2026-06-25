@@ -109,13 +109,13 @@ export default async function AdminUsersPage({
         </div>
         <div className="hidden sm:block overflow-x-auto">
           <div className="w-full text-sm">
-            <div className="border-b border-[var(--color-border)] hidden sm:flex px-4 py-3 text-[var(--color-muted-strong)] text-xs font-semibold uppercase tracking-wider whitespace-nowrap">
+            <div className="border-b border-[var(--color-border)] hidden sm:flex px-4 py-3 text-[var(--color-muted-strong)] text-xs font-semibold uppercase tracking-wider whitespace-nowrap gap-x-4">
               <div className="w-64">User</div>
               <div className="w-28">Role</div>
               <div className="w-20">Total Order</div>
               <div className="w-28">Total Spend</div>
-              <div className="w-36">Bergabung</div>
-              <div className="w-48">Aksi</div>
+              <div className="w-32">Bergabung</div>
+              <div className="flex-1">Aksi</div>
             </div>
 
             <div className="divide-y divide-slate-800/40">
