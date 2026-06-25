@@ -58,7 +58,7 @@ type Props = {
 export default function PromoCarousel({
   slides = DEFAULT_SLIDES,
   autoPlayInterval = 4000,
-  aspectRatio = '21/7',
+  aspectRatio = '16/9',
 }: Props) {
   const [current, setCurrent] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -109,7 +109,7 @@ export default function PromoCarousel({
 
   return (
     <div
-      className="relative w-full max-w-full rounded-lg overflow-hidden select-none"
+      className="relative w-full max-w-full rounded-lg overflow-hidden select-none aspect-[16/9] sm:aspect-[21/7] min-h-[180px] sm:min-h-[220px]"
       style={{ aspectRatio, minHeight: 0 }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -131,6 +131,7 @@ export default function PromoCarousel({
               src={s.image}
               alt={s.title}
               fill
+              sizes="100vw"
               className="object-cover"
               priority={i === 0}
               onError={() => setImgErrors(p => ({ ...p, [s.id]: true }))}
