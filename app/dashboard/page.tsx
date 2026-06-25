@@ -182,13 +182,13 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="flex flex-wrap gap-3 justify-between">
+      <div className="flex flex-nowrap overflow-x-auto gap-2 pb-2">
         {statCards.map((card) => {
           const colors = accentColors[card.accent]
           return (
             <div
               key={card.label}
-              className={`rounded-lg border ${colors.border} p-4 sm:p-5 shadow-lg ${colors.glow} flex-auto basis-full sm:basis-[calc(50%-0.75rem)] xl:basis-[calc(25%-0.75rem)] min-w-0`}
+              className={`rounded-lg border ${colors.border} p-3 sm:p-4 shadow-lg ${colors.glow} flex-none basis-[calc(25%-0.5rem)] max-w-[calc(25%-0.5rem)] min-w-[140px]`}
               style={{ background: 'var(--color-surface)' }}
             >
               <div className="flex items-start justify-between mb-3">
@@ -209,22 +209,22 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick Top Up + Recent Orders */}
-      <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-6">
+      <div className="flex flex-col gap-6 md:flex-row md:items-stretch md:gap-6">
 
         {/* Popular Games */}
-        <div className="flex-auto basis-full md:basis-[60%] min-w-0 rounded-lg border border-[var(--color-border-subtle)] p-4 sm:p-6" style={{ background: 'var(--color-surface-strong)' }}>
+        <div className="flex flex-col flex-auto basis-full md:basis-[60%] min-w-0 rounded-lg border border-[var(--color-border-subtle)] p-4 sm:p-6 h-full" style={{ background: 'var(--color-surface-strong)' }}>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-[var(--color-frost)] font-semibold text-lg">Game Populer</h2>
             <Link href="/dashboard/topup" className="text-[var(--color-frost)] text-sm hover:text-[var(--color-frost)] transition-colors">
               Lihat semua →
             </Link>
           </div>
-          <div className="flex flex-wrap gap-3 justify-start">
+          <div className="flex flex-wrap gap-2 justify-center">
             {POPULAR_GAMES.map((game) => (
               <Link
                 key={game.key}
                 href={`/dashboard/topup/${game.key}`}
-                className="group relative rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-border)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg flex-none basis-[calc(50%-0.75rem)] sm:basis-[calc(50%-0.75rem)] md:basis-[calc(33.333%-1rem)] lg:basis-[calc(25%-1rem)] min-w-0"
+                className="group relative rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-border)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg flex-none basis-[calc(50%-0.5rem)] sm:basis-[calc(50%-0.5rem)] md:basis-[calc(33.333%-0.75rem)] lg:basis-[calc(25%-0.75rem)] min-w-0"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-20 group-hover:opacity-30 transition-opacity`} />
                 <div className="relative p-4 flex flex-col items-center text-center gap-2">
@@ -240,7 +240,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent Orders */}
-        <div className="flex-auto basis-full md:basis-[40%] min-w-0 rounded-lg border border-[var(--color-border-subtle)] p-5 sm:p-6" style={{ background: 'var(--color-surface-strong)' }}>
+        <div className="flex flex-col flex-auto basis-full md:basis-[40%] min-w-0 rounded-lg border border-[var(--color-border-subtle)] p-5 sm:p-6 h-full min-h-0" style={{ background: 'var(--color-surface-strong)' }}>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-[var(--color-frost)] font-semibold text-lg">Transaksi Terbaru</h2>
             <Link href="/dashboard/orders" className="text-[var(--color-frost)] text-sm hover:text-[var(--color-frost)] transition-colors">
@@ -265,7 +265,7 @@ export default async function DashboardPage() {
               </Link>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="flex-1 overflow-y-auto space-y-3 max-h-[min(60vh,520px)] pr-1">
               {stats.recentOrders.map((order: Order) => {
                 const status = STATUS_CONFIG[order.status as keyof typeof STATUS_CONFIG]
                 const gameInfo = SUPPORTED_GAMES[order.game]
