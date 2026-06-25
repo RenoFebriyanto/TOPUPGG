@@ -147,7 +147,7 @@ export default async function DashboardPage() {
 
       {/* Welcome Banner */}
       <div
-        className="relative rounded-lg overflow-hidden border border-[var(--color-shadow)] p-6 lg:p-8"
+        className="relative rounded-lg overflow-hidden border border-[var(--color-shadow)] p-4 sm:p-5 lg:p-6"
           style={{
           background: 'linear-gradient(135deg, var(--color-surface) 0%, var(--color-overlay-watermark) 50%, var(--color-overlay-background) 100%)',
         }}
@@ -155,7 +155,7 @@ export default async function DashboardPage() {
         <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--color-info-bg)] rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-[var(--color-violet-bg)] rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <p className="text-[var(--color-muted)] text-sm mb-1">Selamat datang kembali</p>
             <h1 className="text-2xl lg:text-3xl font-bold text-[var(--color-frost)]">
@@ -182,14 +182,14 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-3 justify-between">
         {statCards.map((card) => {
           const colors = accentColors[card.accent]
           return (
             <div
               key={card.label}
-              className={`flex-auto min-w-[170px] sm:min-w-[220px] max-w-[18rem] rounded-lg border ${colors.border} p-5 shadow-lg ${colors.glow}`}
-              style={{ background: 'var(--color-surface)' }}
+              className={`rounded-lg border ${colors.border} p-4 sm:p-5 shadow-lg ${colors.glow}`}
+              style={{ background: 'var(--color-surface)', flex: '1 1 220px', minWidth: '190px', maxWidth: 'calc(25% - 0.75rem)' }}
             >
               <div className="flex items-start justify-between mb-3">
                 <p className="text-[var(--color-muted)] text-xs font-medium leading-tight">{card.label}</p>
@@ -219,12 +219,13 @@ export default async function DashboardPage() {
               Lihat semua →
             </Link>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 justify-center">
             {POPULAR_GAMES.map((game) => (
               <Link
                 key={game.key}
                 href={`/dashboard/topup/${game.key}`}
-                className="group relative flex-auto min-w-[160px] sm:min-w-[180px] rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-border)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                className="group relative rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-border)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                style={{ flex: '1 1 calc(33.333% - 1rem)', minWidth: '200px', maxWidth: 'calc(33.333% - 1rem)' }}
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-20 group-hover:opacity-30 transition-opacity`} />
                 <div className="relative p-4 flex flex-col items-center text-center gap-2">
@@ -240,7 +241,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent Orders */}
-        <div className="flex-auto min-w-[220px] lg:basis-[35%] rounded-lg border border-[var(--color-border-subtle)] p-6" style={{ background: 'var(--color-surface-strong)' }}>
+        <div className="flex-auto min-w-[240px] lg:basis-[35%] rounded-lg border border-[var(--color-border-subtle)] p-5 sm:p-6" style={{ background: 'var(--color-surface-strong)' }}>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-[var(--color-frost)] font-semibold text-lg">Transaksi Terbaru</h2>
             <Link href="/dashboard/orders" className="text-[var(--color-frost)] text-sm hover:text-[var(--color-frost)] transition-colors">
@@ -273,6 +274,7 @@ export default async function DashboardPage() {
                   <div
                     key={order.id}
                     className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 rounded-lg bg-[var(--color-surface-muted)] border border-[var(--color-border)]"
+                    style={{ width: '100%' }}
                   >
                     <div className="w-8 h-8 rounded-md bg-[var(--color-scrollbar)] flex items-center justify-center shrink-0 overflow-hidden">
                       {gameInfo
@@ -284,7 +286,7 @@ export default async function DashboardPage() {
                       <p className="text-[var(--color-frost)] text-xs font-medium truncate">{order.productName}</p>
                       <p className="text-[var(--color-muted-strong)] text-xs truncate">{order.game}</p>
                     </div>
-                    <div className="text-left sm:text-right shrink-0 min-w-0">
+                    <div className="text-left sm:text-right shrink-0 min-w-[120px]">
                       <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium border ${status.bg} ${status.color}`}>
                         {status.label}
                       </span>
