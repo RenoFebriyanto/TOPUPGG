@@ -182,13 +182,13 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="flex flex-wrap gap-4">
         {statCards.map((card) => {
           const colors = accentColors[card.accent]
           return (
             <div
               key={card.label}
-              className={`rounded-lg border ${colors.border} p-5 shadow-lg ${colors.glow}`}
+              className={`flex-auto min-w-[170px] sm:min-w-[220px] max-w-[18rem] rounded-lg border ${colors.border} p-5 shadow-lg ${colors.glow}`}
               style={{ background: 'var(--color-surface)' }}
             >
               <div className="flex items-start justify-between mb-3">
@@ -209,22 +209,22 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick Top Up + Recent Orders */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div className="flex flex-wrap gap-6">
 
         {/* Popular Games */}
-        <div className="lg:col-span-3 rounded-lg border border-[var(--color-border-subtle)] p-4 sm:p-6" style={{ background: 'var(--color-surface-strong)' }}>
+        <div className="flex-auto min-w-[220px] lg:basis-[65%] rounded-lg border border-[var(--color-border-subtle)] p-4 sm:p-6" style={{ background: 'var(--color-surface-strong)' }}>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-[var(--color-frost)] font-semibold text-lg">Game Populer</h2>
             <Link href="/dashboard/topup" className="text-[var(--color-frost)] text-sm hover:text-[var(--color-frost)] transition-colors">
               Lihat semua →
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="flex flex-wrap gap-3">
             {POPULAR_GAMES.map((game) => (
               <Link
                 key={game.key}
                 href={`/dashboard/topup/${game.key}`}
-                className="group relative rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-border)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                className="group relative flex-auto min-w-[160px] sm:min-w-[180px] rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-border)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-20 group-hover:opacity-30 transition-opacity`} />
                 <div className="relative p-4 flex flex-col items-center text-center gap-2">
@@ -240,7 +240,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent Orders */}
-        <div className="lg:col-span-2 rounded-lg border border-[var(--color-border-subtle)] p-6" style={{ background: 'var(--color-surface-strong)' }}>
+        <div className="flex-auto min-w-[220px] lg:basis-[35%] rounded-lg border border-[var(--color-border-subtle)] p-6" style={{ background: 'var(--color-surface-strong)' }}>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-[var(--color-frost)] font-semibold text-lg">Transaksi Terbaru</h2>
             <Link href="/dashboard/orders" className="text-[var(--color-frost)] text-sm hover:text-[var(--color-frost)] transition-colors">

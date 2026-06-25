@@ -65,10 +65,10 @@ export default function TopUpPage() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="flex flex-wrap gap-4">
           {filtered.map(([key, game]) => (
             <Link key={key} href={`/dashboard/topup/${key}`}
-              className="group relative rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-border)]/60 transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl">
+              className="group relative flex-auto min-w-[160px] sm:min-w-[180px] md:min-w-[220px] rounded-lg overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-border)]/60 transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl">
               <div className={`absolute inset-0 bg-gradient-to-br ${game.color} opacity-20 group-hover:opacity-35 transition-opacity duration-200`} />
               <div className="relative p-6 flex flex-col gap-4" style={{ background: 'var(--color-surface-dark)' }}>
                 <div className="flex items-start justify-between">
