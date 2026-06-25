@@ -20,11 +20,6 @@ export const metadata: Metadata = {
     template: "%s — ThreeTop",
   },
   description: "Top up game favorit kamu dengan harga terbaik. Mobile Legends, Free Fire, PUBG Mobile, Genshin Impact, dan 50+ game lainnya. Proses instan, aman, dan terpercaya.",
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
   keywords: ["top up game", "diamond ml", "uc pubg", "free fire diamond", "top up murah", "threetop"],
   authors: [{ name: "ThreeTop" }],
   creator: "ThreeTop",
@@ -58,6 +53,12 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true },
   },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({

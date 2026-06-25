@@ -2,6 +2,7 @@ import { prisma } from '@/lib/db'
 import Link from 'next/link'
 import AdminOrderActions from '@/components/admin/OrderActions'
 import AdminExportButton from '@/components/admin/ExportButton'
+import CopyButton from '@/components/ui/CopyButton'
 import GameIcon from '@/components/ui/GameIcon'
 import { SUPPORTED_GAMES } from '@/lib/digiflazz'
 
