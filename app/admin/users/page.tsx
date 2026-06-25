@@ -32,12 +32,11 @@ export default async function AdminUsersPage({
       orderBy: { createdAt: 'desc' },
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
-      select: {
+        select: {
         id: true,
         name: true,
         email: true,
         role: true,
-          suspendedUntil: true,
         createdAt: true,
         _count: { select: { orders: true } },
         orders: {

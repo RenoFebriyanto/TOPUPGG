@@ -41,7 +41,7 @@ export default function AdminOrderActions({
       <button
         onClick={() => setOpen(!open)}
         disabled={loading}
-        className="px-2.5 py-1.5 rounded-lg text-xs bg-[var(--color-surface-strong)] border border-[var(--color-border)] text-white hover:text-white hover:bg-[var(--color-surface)] transition-colors disabled:opacity-50 whitespace-nowrap"
+        className="px-2.5 py-1.5 rounded-lg text-xs bg-[var(--color-violet-bg)] border border-[var(--color-violet-border)] text-[var(--color-violet)] hover:bg-[var(--color-violet-bg)] hover:text-[var(--color-violet)] transition-colors disabled:opacity-50 whitespace-nowrap"
       >
         {loading ? '...' : 'Ubah Status'}
       </button>
@@ -50,10 +50,10 @@ export default function AdminOrderActions({
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-8 z-20 w-36 rounded-lg border border-[var(--color-border)] overflow-hidden shadow-2xl"
-            style={{ background: 'var(--color-surface-strong)' }}>
+            style={{ background: 'var(--color-surface-dark)' }}>
             {others.map((s) => (
               <button key={s} onClick={() => updateStatus(s)}
-                className="w-full text-left px-3 py-2.5 text-xs text-white hover:bg-[var(--color-surface-dark)] hover:text-white transition-colors">
+                className="w-full text-left px-3 py-2.5 text-xs text-[var(--color-frost)] hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-frost)] transition-colors">
                 → {s === 'SUCCESS' ? 'Sukses' : s === 'FAILED' ? 'Gagal' : s === 'PROCESSING' ? 'Diproses' : 'Pending'}
               </button>
             ))}
