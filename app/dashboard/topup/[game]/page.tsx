@@ -25,6 +25,11 @@ function formatCurrency(amount: number) {
   }).format(amount)
 }
 
+function formatProductLabel(productName: string) {
+  const cleaned = productName.replace(/^.*?-\s*/, '').trim()
+  return cleaned || productName
+}
+
 async function pollOrderStatus(orderId: string, onDone: (result: OrderResult) => void) {
   const MAX_ATTEMPTS = 40
   let attempts = 0
@@ -305,7 +310,7 @@ export default function GameTopUpPage() {
               {products.map((product) => {
                 const isSelected = selectedProduct?.buyer_sku_code === product.buyer_sku_code
                 return (
-                  <div key={product.buyer_sku_code} className="px-2 w-1/2 md:flex-1 md:basis-[180px] md:min-w-[180px] md:max-w-[260px]">
+                  <div key={product.buyer_sku_code} className="px-2 w-1/2 min-w-[140px] max-w-[220px] md:flex-1 md:basis-[180px] md:min-w-[180px] md:max-w-[260px]">
                     <button onClick={() => step === 'select' && handleSelectProduct(product)} disabled={step !== 'select'}
                       className={`relative rounded-xl border p-3 text-left transition-all duration-150 w-full ${isSelected ? 'border-[var(--color-info-border)] bg-[var(--color-info-bg)]' : step === 'select' ? 'border-[var(--color-border)] hover:border-[var(--color-border)]/60 hover:bg-[var(--color-surface-muted)] cursor-pointer' : 'border-[var(--color-border)] opacity-40 cursor-default'}`}
                       style={{ background: isSelected ? undefined : 'var(--color-surface-dark)' }}>
@@ -314,9 +319,9 @@ export default function GameTopUpPage() {
                         <div className="w-10 h-10 flex-shrink-0">
                           <GameIcon image={gameInfo.image} fallback={gameInfo.icon} label={gameInfo.label} size={36} className="rounded-md" />
                         </div>
-                        <div className="flex-1">
-                          <p className="text-white font-semibold text-sm leading-tight">{product.product_name}</p>
-                          <p className="text-[var(--color-frost)] font-bold text-base mt-1">{formatCurrency(product.price)}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-white font-semibold text-xs md:text-sm leading-tight break-words">{formatProductLabel(product.product_name)}</p>
+                          <p className="text-[var(--color-frost)] font-bold text-sm mt-1">{formatCurrency(product.price)}</p>
                         </div>
                       </div>
                     </button>
