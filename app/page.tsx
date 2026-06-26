@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth'
 import Link from 'next/link'
 import { SUPPORTED_GAMES } from '@/lib/digiflazz'
+import GameIcon from '@/components/ui/GameIcon'
 
 const theme = {
   background: 'var(--color-abyss)',
@@ -140,7 +141,7 @@ export default async function HomePage() {
                 <div className="relative p-5">
                   <div className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3 overflow-hidden"
                     style={{ background: theme.surface }}>
-                    <span className="text-xs font-bold" style={{ color: theme.muted }}>{game.icon}</span>
+                    <GameIcon image={game.image} fallback={game.icon} label={game.label} size={48} className="p-1" />
                   </div>
                   <p className="text-xs font-semibold leading-tight" style={{ color: theme.foreground }}>{game.label}</p>
                   <p className="text-xs mt-1" style={{ color: theme.mutedStrong }}>{game.tag}</p>
