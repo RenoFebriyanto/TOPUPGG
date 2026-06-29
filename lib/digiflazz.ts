@@ -61,57 +61,58 @@ export async function getProducts(): Promise<DigiflazzProduct[]> {
   }
 
   productsFetchPromise = (async () => {
-    const signature = createSignature('pricelist')
-  const res = await fetch(`${BASE_URL}/price-list`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ cmd: 'prepaid', username: USERNAME, sign: signature }),
-    cache: 'no-store',
-  })
+    try {
+      const signature = createSignature('pricelist')
+      const res = await fetch(`${BASE_URL}/price-list`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cmd: 'prepaid', username: USERNAME, sign: signature }),
+        cache: 'no-store',
+      })
 
-  if (!res.ok) throw new Error(`Digiflazz API error: ${res.status}`)
-  const data = await res.json()
+      if (!res.ok) throw new Error(`Digiflazz API error: ${res.status}`)
+      const data = await res.json()
 
-  // Log untuk debugging jika response tidak biasa
-  const isDataArray = Array.isArray(data.data)
-  if (!isDataArray) {
-    console.log('[DIGIFLAZZ_RAW]', JSON.stringify(data).substring(0, 300))
-  }
+      // Log untuk debugging jika response tidak biasa
+      const isDataArray = Array.isArray(data.data)
+      if (!isDataArray) {
+        console.log('[DIGIFLAZZ_RAW]', JSON.stringify(data).substring(0, 300))
+      }
 
-  const rc = data?.data?.rc ?? data?.rc
-  const message = data?.data?.message ?? data?.message ?? ''
+      const rc = data?.data?.rc ?? data?.rc
+      const message = data?.data?.message ?? data?.message ?? ''
 
-  // Handle rate limit
-  if (rc === '83') {
-    if (productsCache) {
-      console.warn('[DIGIFLAZZ] Rate limited, using stale cache')
+      // Handle rate limit
+      if (rc === '83') {
+        if (productsCache) {
+          console.warn('[DIGIFLAZZ] Rate limited, using stale cache')
+          return productsCache.data
+        }
+        throw new Error('Rate limit Digiflazz: terlalu banyak request. Coba lagi sebentar.')
+      }
+
+      // Handle other Digiflazz error responses
+      if (rc && !isDataArray) {
+        if (productsCache) {
+          console.warn('[DIGIFLAZZ] Error response, using stale cache', rc, message)
+          return productsCache.data
+        }
+        throw new Error(`Digiflazz error rc=${rc}: ${message}`)
+      }
+
+      const products = data.data ?? data ?? []
+      if (!Array.isArray(products)) {
+        if (productsCache) return productsCache.data
+        throw new Error(`Format response tidak valid: ${JSON.stringify(data).substring(0, 200)}`)
+      }
+
+      // Simpan ke cache dengan TTL 5 menit
+      productsCache = { data: products as DigiflazzProduct[], expiresAt: Date.now() + 5 * 60 * 1000 }
       return productsCache.data
+    } finally {
+      productsFetchPromise = null
     }
-    throw new Error('Rate limit Digiflazz: terlalu banyak request. Coba lagi sebentar.')
-  }
-
-  // Handle other Digiflazz error responses
-  if (rc && !isDataArray) {
-    if (productsCache) {
-      console.warn('[DIGIFLAZZ] Error response, using stale cache', rc, message)
-      return productsCache.data
-    }
-    throw new Error(`Digiflazz error rc=${rc}: ${message}`)
-  }
-
-  const products = data.data ?? data ?? []
-  if (!Array.isArray(products)) {
-    if (productsCache) return productsCache.data
-    throw new Error(`Format response tidak valid: ${JSON.stringify(data).substring(0, 200)}`)
-  }
-
-  // Simpan ke cache dengan TTL 5 menit
-  productsCache = { data: products as DigiflazzProduct[], expiresAt: Date.now() + 5 * 60 * 1000 }
-  return productsCache.data
-} finally {
-    productsFetchPromise = null
-  }
-})()
+  })()
 
   return productsFetchPromise
 }
