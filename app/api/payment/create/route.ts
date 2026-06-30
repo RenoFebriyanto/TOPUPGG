@@ -40,6 +40,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Buat order dengan status PENDING dan paymentStatus UNPAID
+    const sellPrice = product.sell_price ?? product.price
+
     const order = await prisma.order.create({
       data: {
         userId: session.user.id,
@@ -47,7 +49,7 @@ export async function POST(req: NextRequest) {
         productName: product.product_name,
         productCode: skuCode,
         gameUserId,
-        amount: product.price,
+        amount: sellPrice,
         status: 'PENDING',
         paymentStatus: 'UNPAID',
       },
@@ -56,12 +58,12 @@ export async function POST(req: NextRequest) {
     // Buat Snap token Midtrans
     const snapResult = await createSnapToken({
       orderId: order.id,
-      amount: product.price,
+      amount: sellPrice,
       customerName: session.user.name ?? 'Pelanggan',
       customerEmail: session.user.email ?? '',
       item: {
         id: skuCode,
-        price: product.price,
+        price: sellPrice,
         quantity: 1,
         name: product.product_name.substring(0, 50),
       },

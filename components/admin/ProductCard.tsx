@@ -17,7 +17,7 @@ export default function ProductCard({ product }: { product: Product }) {
           <p className="text-white text-sm font-semibold truncate">{product.product_name}</p>
           <p className="text-[var(--color-muted)] text-xs mt-1 truncate">{product.buyer_sku_code}</p>
         </div>
-        <span className="text-[var(--color-frost)] font-semibold text-sm whitespace-nowrap">{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(product.price)}</span>
+        <span className="text-[var(--color-frost)] font-semibold text-sm whitespace-nowrap">{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(product.sell_price ?? product.price)}</span>
       </div>
 
       <div className="flex flex-wrap gap-2 text-xs text-[var(--color-muted)] mt-3">

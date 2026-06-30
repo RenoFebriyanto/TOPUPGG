@@ -74,7 +74,7 @@ export default async function AdminProductsPage() {
                           <p className="text-white text-sm font-semibold truncate">{p.product_name}</p>
                           <p className="text-[var(--color-muted)] text-xs mt-1 truncate">{p.buyer_sku_code}</p>
                         </div>
-                        <span className="text-[var(--color-frost)] font-semibold text-sm whitespace-nowrap">{formatCurrency(p.price)}</span>
+                        <span className="text-[var(--color-frost)] font-semibold text-sm whitespace-nowrap">{formatCurrency(p.sell_price ?? p.price)}</span>
                       </div>
                       <div className="flex flex-wrap gap-2 text-xs text-[var(--color-muted)]">
                         <span className="rounded-full bg-[var(--color-surface-muted)] px-2 py-1">{p.unlimited_stock ? 'Stok: ∞' : `Stok: ${p.stock}`}</span>

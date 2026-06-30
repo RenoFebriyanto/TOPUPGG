@@ -10,7 +10,7 @@ type Product = {
 }
 
 export default function ProductRow({ product }: { product: Product }) {
-  const price = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(product.price)
+  const price = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(product.sell_price ?? product.price)
 
   return (
     <div className="flex items-center px-4 py-2.5 hover:bg-[var(--color-abyss)]/20 transition-colors">

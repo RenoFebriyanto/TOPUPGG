@@ -4,6 +4,7 @@ const BASE_URL = 'https://api.digiflazz.com/v1'
 const USERNAME = process.env.DIGIFLAZZ_USERNAME ?? ''
 const API_KEY  = process.env.DIGIFLAZZ_API_KEY ?? ''
 export const WEBHOOK_SECRET = process.env.DIGIFLAZZ_WEBHOOK_SECRET ?? ''
+const DEFAULT_PRICE_MARKUP_PERCENT = 0.10
 
 function createSignature(suffix: string): string {
   return crypto
@@ -28,6 +29,7 @@ export type DigiflazzProduct = {
   start_cut_off: string
   end_cut_off: string
   desc: string
+  sell_price?: number
 }
 
 export type DigiflazzTransaction = {
@@ -48,6 +50,19 @@ export type DigiflazzTransaction = {
 // Mencegah rate limit Digiflazz (rc: 83) akibat request terlalu sering
 let productsCache: { data: DigiflazzProduct[]; expiresAt: number } | null = null
 let productsFetchPromise: Promise<DigiflazzProduct[]> | null = null
+
+function getSellPrice(basePrice: number): number {
+  const markupPercent = Number(process.env.PRICE_MARKUP_PERCENT ?? DEFAULT_PRICE_MARKUP_PERCENT)
+  const markupValue = Number.isFinite(markupPercent) ? markupPercent : DEFAULT_PRICE_MARKUP_PERCENT
+  return Math.round(basePrice * (1 + markupValue))
+}
+
+function enrichProductsWithSellPrice(products: DigiflazzProduct[]): DigiflazzProduct[] {
+  return products.map((product) => ({
+    ...product,
+    sell_price: getSellPrice(product.price),
+  }))
+}
 
 export async function getProducts(): Promise<DigiflazzProduct[]> {
   // Return cache jika masih valid
@@ -106,8 +121,10 @@ export async function getProducts(): Promise<DigiflazzProduct[]> {
         throw new Error(`Format response tidak valid: ${JSON.stringify(data).substring(0, 200)}`)
       }
 
+      const enrichedProducts = enrichProductsWithSellPrice(products as DigiflazzProduct[])
+
       // Simpan ke cache dengan TTL 5 menit
-      productsCache = { data: products as DigiflazzProduct[], expiresAt: Date.now() + 5 * 60 * 1000 }
+      productsCache = { data: enrichedProducts, expiresAt: Date.now() + 5 * 60 * 1000 }
       return productsCache.data
     } finally {
       productsFetchPromise = null

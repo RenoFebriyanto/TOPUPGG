@@ -120,6 +120,10 @@ export default function GameTopUpPage() {
 
   function handleSelectProduct(product: DigiflazzProduct) { setSelectedProduct(product); setStep('input'); setInputError('') }
 
+  function getDisplayPrice(product: DigiflazzProduct) {
+    return product.sell_price ?? product.price
+  }
+
   function handleInputSubmit() {
     setInputError('')
     if (!gameUserId.trim()) { setInputError(`${gameInfo.userIdLabel} wajib diisi.`); return }
@@ -330,7 +334,7 @@ export default function GameTopUpPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-white font-semibold text-xs md:text-sm leading-tight break-words">{formatProductLabel(product.product_name)}</p>
-                          <p className="text-[var(--color-frost)] font-bold text-sm mt-1">{formatCurrency(product.price)}</p>
+                          <p className="text-[var(--color-frost)] font-bold text-sm mt-1">{formatCurrency(getDisplayPrice(product))}</p>
                         </div>
                       </div>
                     </button>
@@ -430,7 +434,7 @@ export default function GameTopUpPage() {
               { label: 'Produk', value: selectedProduct.product_name },
               { label: gameInfo.userIdLabel, value: customerNoDisplay },
               ...(nickname ? [{ label: 'Nickname', value: nickname }] : []),
-              { label: 'Total Bayar', value: formatCurrency(selectedProduct.price), highlight: true },
+              { label: 'Total Bayar', value: formatCurrency(getDisplayPrice(selectedProduct)), highlight: true },
             ].map((item) => (
               <div key={item.label} className={`flex justify-between items-center px-4 py-3 border-b border-[var(--color-border)]/60 last:border-0 ${'highlight' in item && item.highlight ? 'bg-[var(--color-info-bg)]' : ''}`}>
                 <span className="text-[var(--color-muted)] text-sm">{item.label}</span>
@@ -450,7 +454,7 @@ export default function GameTopUpPage() {
                 <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                 Memuat Pembayaran...
               </span>
-            ) : `Bayar ${formatCurrency(selectedProduct.price)}`}
+            ) : `Bayar ${formatCurrency(getDisplayPrice(selectedProduct))}`}
           </button>
         </div>
       )}
