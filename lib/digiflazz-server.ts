@@ -40,6 +40,40 @@ type DigiflazzPriceListResponse = {
   message?: string
 }
 
+function isPotentialProductItem(value: unknown): value is Record<string, unknown> {
+  if (!value || typeof value !== 'object') return false
+  const item = value as Record<string, unknown>
+  const hasSku = typeof item.buyer_sku_code === 'string' || typeof item.buyerSkuCode === 'string'
+  const hasName = typeof item.product_name === 'string' || typeof item.productName === 'string'
+  const priceValue = item.price ?? item.harga
+  const hasPrice = typeof priceValue === 'number' || (typeof priceValue === 'string' && priceValue.trim() !== '' && !Number.isNaN(Number(priceValue)))
+  return hasSku && hasName && hasPrice
+}
+
+function findProductArray(data: unknown): DigiflazzProduct[] | undefined {
+  if (!data || typeof data !== 'object') return undefined
+
+  if (Array.isArray(data)) {
+    const products = data.filter(isPotentialProductItem) as DigiflazzProduct[]
+    return products.length > 0 ? products : undefined
+  }
+
+  const objectData = data as Record<string, unknown>
+  for (const value of Object.values(objectData)) {
+    if (Array.isArray(value)) {
+      const products = value.filter(isPotentialProductItem) as DigiflazzProduct[]
+      if (products.length > 0) return products
+    }
+  }
+
+  for (const value of Object.values(objectData)) {
+    const nested = findProductArray(value)
+    if (nested) return nested
+  }
+
+  return undefined
+}
+
 function normalizePriceListResponse(data: unknown): DigiflazzPriceListResponse {
   if (Array.isArray(data)) {
     return { products: data }
@@ -49,48 +83,9 @@ function normalizePriceListResponse(data: unknown): DigiflazzPriceListResponse {
     const body = data as Record<string, unknown>
     const maybeData = body.data
 
-    if (Array.isArray(maybeData)) {
-      return {
-        products: maybeData as DigiflazzProduct[],
-        rc: typeof body.rc === 'string' ? body.rc : undefined,
-        message: typeof body.message === 'string' ? body.message : undefined,
-      }
-    }
-
-    if (maybeData && typeof maybeData === 'object') {
-      const nested = maybeData as Record<string, unknown>
-      if (Array.isArray(nested.products)) {
-        return {
-          products: nested.products as DigiflazzProduct[],
-          rc: typeof nested.rc === 'string' ? nested.rc : typeof body.rc === 'string' ? body.rc : undefined,
-          message: typeof nested.message === 'string' ? nested.message : typeof body.message === 'string' ? body.message : undefined,
-        }
-      }
-      if (Array.isArray(nested.data)) {
-        return {
-          products: nested.data as DigiflazzProduct[],
-          rc: typeof nested.rc === 'string' ? nested.rc : typeof body.rc === 'string' ? body.rc : undefined,
-          message: typeof nested.message === 'string' ? nested.message : typeof body.message === 'string' ? body.message : undefined,
-        }
-      }
-      if (Array.isArray(nested)) {
-        return {
-          products: nested as DigiflazzProduct[],
-          rc: typeof nested.rc === 'string' ? nested.rc : undefined,
-          message: typeof nested.message === 'string' ? nested.message : undefined,
-        }
-      }
-    }
-    if (Array.isArray(body.products)) {
-      return {
-        products: body.products as DigiflazzProduct[],
-        rc: typeof body.rc === 'string' ? body.rc : undefined,
-        message: typeof body.message === 'string' ? body.message : undefined,
-      }
-    }
-
+    const products = findProductArray(maybeData ?? body) ?? []
     return {
-      products: [],
+      products,
       rc: typeof body.rc === 'string' ? body.rc : undefined,
       message: typeof body.message === 'string' ? body.message : undefined,
     }
