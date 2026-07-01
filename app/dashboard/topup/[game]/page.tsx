@@ -316,7 +316,7 @@ export default function GameTopUpPage() {
                 const isSelected = selectedProduct?.buyer_sku_code === product.buyer_sku_code
                 const productIcon = getProductIcon(product, gameKey)
                 return (
-                  <div key={product.buyer_sku_code} className="px-2 w-1/2 min-w-[150px] max-w-[240px] md:flex-1 md:basis-[200px] md:min-w-[190px] md:max-w-[280px]">
+                  <div key={product.buyer_sku_code} className="px-2 w-1/2 min-w-0 max-w-[50%] md:flex-1 md:basis-[200px] md:min-w-[190px] md:max-w-[280px]">
                     <button onClick={() => step === 'select' && handleSelectProduct(product)} disabled={step !== 'select'}
                       className={`relative rounded-xl border p-3 text-left transition-all duration-150 w-full ${isSelected ? 'border-[var(--color-info-border)] bg-[var(--color-info-bg)]' : step === 'select' ? 'border-[var(--color-border)] hover:border-[var(--color-border)]/60 hover:bg-[var(--color-surface-muted)] cursor-pointer' : 'border-[var(--color-border)] opacity-40 cursor-default'}`}
                       style={{ background: isSelected ? undefined : 'var(--color-surface-dark)' }}>
