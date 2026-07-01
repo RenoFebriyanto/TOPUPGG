@@ -14,7 +14,7 @@ export async function GET() {
       total: products.length,
     }, {
       headers: {
-        'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=60',
+        'Cache-Control': 'no-store',
       },
     })
   } catch (error) {

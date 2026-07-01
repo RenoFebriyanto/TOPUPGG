@@ -102,10 +102,10 @@ export default function GameTopUpPage() {
   const fetchProducts = useCallback(async () => {
     setLoading(true); setError('')
     try {
-      const res = await fetch('/api/digiflazz/products')
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Gagal memuat produk')
-      setProducts(data.data?.[gameKey] ?? [])
+      const res = await fetch('/api/digiflazz/products', { cache: 'no-store' })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Gagal memuat produk')
+      setProducts(data?.data?.[gameKey] ?? [])
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Gagal memuat produk')
     } finally { setLoading(false) }
