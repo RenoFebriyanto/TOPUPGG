@@ -1,7 +1,7 @@
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import Link from 'next/link'
-import { checkBalance, SUPPORTED_GAMES } from '@/lib/digiflazz'
+import { checkBalance, SUPPORTED_GAMES } from '@/lib/digiflazz-server'
 import AdminExportButton from '@/components/admin/ExportButton'
 import GameIcon from '@/components/ui/GameIcon'
 

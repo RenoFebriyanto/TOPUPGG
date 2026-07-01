@@ -1,4 +1,4 @@
-import { getProducts, groupProductsByGame, SUPPORTED_GAMES } from '@/lib/digiflazz'
+import { getProducts, groupProductsByGame, SUPPORTED_GAMES } from '@/lib/digiflazz-server'
 import GameIcon from '@/components/ui/GameIcon'
 import Container from '@/components/layout/Container'
 import ProductCard from '@/components/admin/ProductCard'

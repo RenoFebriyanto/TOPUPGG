@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { prisma } from '@/lib/db'
-import { WEBHOOK_SECRET } from '@/lib/digiflazz'
+import { WEBHOOK_SECRET } from '@/lib/digiflazz-server'
 
 // Digiflazz mengirim notifikasi update status transaksi ke endpoint ini
 // Payload: { data: { ref_id, buyer_sku_code, customer_no, status, sn, rc, message } }

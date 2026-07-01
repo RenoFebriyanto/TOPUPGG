@@ -85,3 +85,11 @@ enum PaymentStatus {
   EXPIRED
   REFUNDED
 }
+
+model DigiflazzProduct {
+  id             String   @id @default(cuid())
+  buyerSkuCode   String   @unique
+  game           String
+  product        Json
+  updatedAt      DateTime @updatedAt
+}

@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server'
-import { getProducts, groupProductsByGame } from '@/lib/digiflazz'
+import { getProducts, groupProductsByGame } from '@/lib/digiflazz-server'
 
-// Tidak cache di CDN — data dikelola oleh in-memory cache di lib/digiflazz.ts
-export const dynamic = 'force-dynamic'
+export const dynamic = 'auto'
 
 export async function GET() {
   try {
@@ -14,7 +13,9 @@ export async function GET() {
       data: grouped,
       total: products.length,
     }, {
-      headers: { 'Cache-Control': 'no-store' },
+      headers: {
+        'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=60',
+      },
     })
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Unknown error'

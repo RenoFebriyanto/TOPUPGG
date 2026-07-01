@@ -311,12 +311,12 @@ export default function GameTopUpPage() {
           {products.length === 0 ? (
             <div className="rounded-xl border border-[var(--color-border)] p-8 text-center" style={{ background: 'var(--color-surface-dark)' }}><p className="text-[var(--color-muted)] text-sm">Tidak ada produk tersedia saat ini.</p></div>
           ) : (
-            <div className="flex flex-wrap -mx-2">
+            <div className="flex flex-wrap gap-2">
               {products.map((product) => {
                 const isSelected = selectedProduct?.buyer_sku_code === product.buyer_sku_code
                 const productIcon = getProductIcon(product, gameKey)
                 return (
-                  <div key={product.buyer_sku_code} className="px-2 w-1/2 min-w-0 max-w-[50%] md:flex-1 md:basis-[200px] md:min-w-[190px] md:max-w-[280px]">
+                  <div key={product.buyer_sku_code} className="flex-none basis-[calc(50%-0.5rem)] max-w-[calc(50%-0.5rem)] min-w-[130px] sm:basis-[calc(50%-0.5rem)] sm:max-w-[calc(50%-0.5rem)] md:flex-1 md:basis-[200px] md:min-w-[190px] md:max-w-[280px]">
                     <button onClick={() => step === 'select' && handleSelectProduct(product)} disabled={step !== 'select'}
                       className={`relative rounded-xl border p-3 text-left transition-all duration-150 w-full ${isSelected ? 'border-[var(--color-info-border)] bg-[var(--color-info-bg)]' : step === 'select' ? 'border-[var(--color-border)] hover:border-[var(--color-border)]/60 hover:bg-[var(--color-surface-muted)] cursor-pointer' : 'border-[var(--color-border)] opacity-40 cursor-default'}`}
                       style={{ background: isSelected ? undefined : 'var(--color-surface-dark)' }}>

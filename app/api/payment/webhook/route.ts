@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { verifyMidtransSignature } from '@/lib/midtrans'
-import { createTransaction } from '@/lib/digiflazz'
+import { createTransaction } from '@/lib/digiflazz-server'
 
 // Midtrans mengirim notifikasi ke endpoint ini setelah pembayaran
 export async function POST(req: NextRequest) {
