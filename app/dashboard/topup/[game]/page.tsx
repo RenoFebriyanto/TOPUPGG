@@ -316,15 +316,6 @@ export default function GameTopUpPage() {
                 const isSelected = selectedProduct?.buyer_sku_code === product.buyer_sku_code
                 const productIcon = getProductIcon(product, gameKey)
                 return (
-<<<<<<< HEAD
-                  <div key={product.buyer_sku_code} className="flex-none w-[calc(50%-0.5rem)] min-w-[130px] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.5rem)]">
-                    <button onClick={() => step === 'select' && handleSelectProduct(product)} disabled={step !== 'select'}
-                      className={`relative rounded-2xl border p-2.5 text-left transition-all duration-150 w-full ${isSelected ? 'border-[var(--color-info-border)] bg-[var(--color-info-bg)]' : step === 'select' ? 'border-[var(--color-border)] hover:border-[var(--color-border)]/60 hover:bg-[var(--color-surface-muted)] cursor-pointer' : 'border-[var(--color-border)] opacity-40 cursor-default'}`}
-                      style={{ background: isSelected ? undefined : 'var(--color-surface-dark)' }}>
-                      {isSelected && <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[var(--color-info)] flex items-center justify-center"><svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg></div>}
-                      <div className="flex items-center gap-2">
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 flex-shrink-0">
-=======
                   <div key={product.buyer_sku_code} className="flex-none basis-[calc(50%-0.5rem)] max-w-[calc(50%-0.5rem)] min-w-[130px] sm:basis-[calc(50%-0.5rem)] sm:max-w-[calc(50%-0.5rem)] md:flex-1 md:basis-[200px] md:min-w-[190px] md:max-w-[280px]">
                     <button onClick={() => step === 'select' && handleSelectProduct(product)} disabled={step !== 'select'}
                       className={`relative rounded-xl border p-3 text-left transition-all duration-150 w-full ${isSelected ? 'border-[var(--color-info-border)] bg-[var(--color-info-bg)]' : step === 'select' ? 'border-[var(--color-border)] hover:border-[var(--color-border)]/60 hover:bg-[var(--color-surface-muted)] cursor-pointer' : 'border-[var(--color-border)] opacity-40 cursor-default'}`}
@@ -332,28 +323,18 @@ export default function GameTopUpPage() {
                       {isSelected && <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[var(--color-info)] flex items-center justify-center"><svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg></div>}
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0">
->>>>>>> parent of af1d5a2 (Update page.tsx)
                           <GameIcon
                             image={productIcon.image}
                             fallback={productIcon.fallback}
                             fallbackImage={productIcon.fallbackImage}
                             label={gameInfo.label}
-<<<<<<< HEAD
-                            size={32}
-=======
                             size={44}
->>>>>>> parent of af1d5a2 (Update page.tsx)
                             className="rounded-md"
                           />
                         </div>
                         <div className="flex-1 min-w-0">
-<<<<<<< HEAD
-                          <p className="text-white font-semibold text-[10px] sm:text-[11px] leading-snug break-words">{formatProductLabel(product.product_name)}</p>
-                          <p className="text-[var(--color-frost)] font-bold text-[11px] sm:text-[12px] mt-1">{formatCurrency(getDisplayPrice(product))}</p>
-=======
                           <p className="text-white font-semibold text-xs md:text-sm leading-tight break-words">{formatProductLabel(product.product_name)}</p>
                           <p className="text-[var(--color-frost)] font-bold text-sm mt-1">{formatCurrency(getDisplayPrice(product))}</p>
->>>>>>> parent of af1d5a2 (Update page.tsx)
                         </div>
                       </div>
                     </button>
