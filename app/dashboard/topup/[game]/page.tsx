@@ -156,7 +156,7 @@ export default function GameTopUpPage() {
             id: data.orderId,
             productName: selectedProduct.product_name,
             gameUserId: customerNo,
-            amount: selectedProduct.price,
+            amount: getDisplayPrice(selectedProduct),
             status: 'PROCESSING', // akan diupdate via polling
           })
           setStep('result')
@@ -169,7 +169,7 @@ export default function GameTopUpPage() {
             id: data.orderId,
             productName: selectedProduct.product_name,
             gameUserId: customerNo,
-            amount: selectedProduct.price,
+            amount: getDisplayPrice(selectedProduct),
             status: 'PROCESSING',
           })
           setStep('result')

@@ -34,14 +34,70 @@ function enrichProductsWithSellPrice(products: DigiflazzProduct[]): DigiflazzPro
   }))
 }
 
-async function getSavedProductsFromDb(): Promise<DigiflazzProduct[] | null> {
-  const rows = await prisma.digiflazzProduct.findMany({
-    orderBy: { updatedAt: 'desc' },
-    take: 1000,
-  })
+type DigiflazzPriceListResponse = {
+  products: DigiflazzProduct[]
+  rc?: string
+  message?: string
+}
 
-  if (!rows?.length) return null
-  return rows.map((row) => row.product as DigiflazzProduct)
+function normalizePriceListResponse(data: unknown): DigiflazzPriceListResponse {
+  if (Array.isArray(data)) {
+    return { products: data }
+  }
+
+  if (data && typeof data === 'object') {
+    const body = data as Record<string, unknown>
+    const maybeData = body.data
+
+    if (Array.isArray(maybeData)) {
+      return {
+        products: maybeData as DigiflazzProduct[],
+        rc: typeof body.rc === 'string' ? body.rc : undefined,
+        message: typeof body.message === 'string' ? body.message : undefined,
+      }
+    }
+
+    if (maybeData && typeof maybeData === 'object') {
+      const nested = maybeData as Record<string, unknown>
+      if (Array.isArray(nested.data)) {
+        return {
+          products: nested.data as DigiflazzProduct[],
+          rc: typeof nested.rc === 'string' ? nested.rc : typeof body.rc === 'string' ? body.rc : undefined,
+          message: typeof nested.message === 'string' ? nested.message : typeof body.message === 'string' ? body.message : undefined,
+        }
+      }
+      if (Array.isArray(nested)) {
+        return {
+          products: nested as DigiflazzProduct[],
+          rc: typeof nested.rc === 'string' ? nested.rc : undefined,
+          message: typeof nested.message === 'string' ? nested.message : undefined,
+        }
+      }
+    }
+
+    return {
+      products: [],
+      rc: typeof body.rc === 'string' ? body.rc : undefined,
+      message: typeof body.message === 'string' ? body.message : undefined,
+    }
+  }
+
+  return { products: [] }
+}
+
+async function getSavedProductsFromDb(): Promise<DigiflazzProduct[] | null> {
+  try {
+    const rows = await prisma.digiflazzProduct.findMany({
+      orderBy: { updatedAt: 'desc' },
+      take: 1000,
+    })
+
+    if (!rows?.length) return null
+    return rows.map((row) => row.product as DigiflazzProduct)
+  } catch (error) {
+    console.error('[DIGIFLAZZ] DB cache fetch failed', error)
+    return null
+  }
 }
 
 async function saveProductsToDb(products: DigiflazzProduct[]) {
@@ -60,33 +116,48 @@ async function saveProductsToDb(products: DigiflazzProduct[]) {
 }
 
 export async function getProducts(): Promise<DigiflazzProduct[]> {
-  const signature = createSignature('pricelist')
-  const res = await fetch(`${BASE_URL}/price-list`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ cmd: 'prepaid', username: USERNAME, sign: signature }),
-    cache: 'no-store',
-  })
-
-  if (!res.ok) {
+  if (!USERNAME || !API_KEY) {
     const saved = await getSavedProductsFromDb()
     if (saved) {
-      console.warn('[DIGIFLAZZ] Price list fetch failed, using DB cache', res.status)
+      console.warn('[DIGIFLAZZ] Credentials missing, using DB cache')
       return saved
     }
-    throw new Error(`Digiflazz API error: ${res.status}`)
+    throw new Error('Digiflazz credentials belum dikonfigurasi.')
   }
 
-  const data = await res.json()
-  const isDataArray = Array.isArray(data.data)
-  if (!isDataArray) {
-    console.log('[DIGIFLAZZ_RAW]', JSON.stringify(data).substring(0, 300))
+  const signature = createSignature('pricelist')
+
+  let data: unknown
+  try {
+    const res = await fetch(`${BASE_URL}/price-list`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cmd: 'prepaid', username: USERNAME, sign: signature }),
+      cache: 'no-store',
+    })
+
+    if (!res.ok) {
+      const saved = await getSavedProductsFromDb()
+      if (saved) {
+        console.warn('[DIGIFLAZZ] Price list fetch failed, using DB cache', res.status)
+        return saved
+      }
+      throw new Error(`Digiflazz API error: ${res.status}`)
+    }
+
+    data = await res.json()
+  } catch (error) {
+    const saved = await getSavedProductsFromDb()
+    if (saved) {
+      console.warn('[DIGIFLAZZ] Fetch failed, using DB cache', error)
+      return saved
+    }
+    throw new Error(error instanceof Error ? error.message : 'Gagal terhubung ke layanan Digiflazz.')
   }
 
-  const rc = data?.data?.rc ?? data?.rc
-  const message = data?.data?.message ?? data?.message ?? ''
+  const normalized = normalizePriceListResponse(data)
 
-  if (rc === '83') {
+  if (normalized.rc === '83') {
     const saved = await getSavedProductsFromDb()
     if (saved) {
       console.warn('[DIGIFLAZZ] Rate limited, using DB cache')
@@ -95,26 +166,16 @@ export async function getProducts(): Promise<DigiflazzProduct[]> {
     throw new Error('Rate limit Digiflazz: terlalu banyak request. Coba lagi sebentar.')
   }
 
-  if (rc && !isDataArray) {
+  if (normalized.products.length === 0) {
     const saved = await getSavedProductsFromDb()
     if (saved) {
-      console.warn('[DIGIFLAZZ] Error response, using DB cache', rc, message)
+      console.warn('[DIGIFLAZZ] Empty product list, using DB cache')
       return saved
     }
-    throw new Error(`Digiflazz error rc=${rc}: ${message}`)
+    throw new Error(`Digiflazz returned empty product list${normalized.rc ? ` (rc=${normalized.rc})` : ''}.`)
   }
 
-  const products = data.data ?? data ?? []
-  if (!Array.isArray(products)) {
-    const saved = await getSavedProductsFromDb()
-    if (saved) {
-      console.warn('[DIGIFLAZZ] Response format invalid, using DB cache')
-      return saved
-    }
-    throw new Error(`Format response tidak valid: ${JSON.stringify(data).substring(0, 200)}`)
-  }
-
-  const enrichedProducts = enrichProductsWithSellPrice(products as DigiflazzProduct[])
+  const enrichedProducts = enrichProductsWithSellPrice(normalized.products)
   await saveProductsToDb(enrichedProducts)
   return enrichedProducts
 }

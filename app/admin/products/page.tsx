@@ -4,6 +4,8 @@ import Container from '@/components/layout/Container'
 import ProductCard from '@/components/admin/ProductCard'
 import ProductRow from '@/components/admin/ProductRow'
 
+export const dynamic = 'force-dynamic'
+
 function formatCurrency(n: number) {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n)
 }

@@ -5,6 +5,8 @@ import { checkBalance, SUPPORTED_GAMES } from '@/lib/digiflazz-server'
 import AdminExportButton from '@/components/admin/ExportButton'
 import GameIcon from '@/components/ui/GameIcon'
 
+export const dynamic = 'force-dynamic'
+
 // Threshold peringatan saldo Digiflazz (Rp 50.000)
 const LOW_BALANCE_THRESHOLD = 50_000
 

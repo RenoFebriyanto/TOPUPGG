@@ -31,15 +31,36 @@ export type DigiflazzTransaction = {
   wa: string
 }
 
+function normalizeText(value: string | undefined): string {
+  return (value ?? '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+}
+
+function matchesGameBrand(product: DigiflazzProduct, gameInfo: (typeof SUPPORTED_GAMES)[string]): boolean {
+  const brandText = normalizeText(product.brand)
+  const nameText = normalizeText(product.product_name)
+  const categoryText = normalizeText(product.category)
+  const keywords = new Set([
+    ...gameInfo.brands.map((brand) => normalizeText(brand)),
+    normalizeText(gameInfo.label),
+    normalizeText(gameInfo.tag),
+  ])
+
+  return [...keywords].some((keyword) =>
+    keyword.length > 2 && (
+      brandText.includes(keyword) ||
+      nameText.includes(keyword) ||
+      categoryText.includes(keyword)
+    )
+  )
+}
+
 export function groupProductsByGame(
   products: DigiflazzProduct[]
 ): Record<string, DigiflazzProduct[]> {
   const grouped: Record<string, DigiflazzProduct[]> = {}
   for (const [gameKey, gameInfo] of Object.entries(SUPPORTED_GAMES)) {
     const filtered = products.filter((p) =>
-      gameInfo.brands.some((brand) =>
-        p.brand?.toLowerCase().includes(brand.toLowerCase())
-      ) && p.buyer_product_status && p.seller_product_status
+      matchesGameBrand(p, gameInfo) && p.buyer_product_status && p.seller_product_status
     )
     if (filtered.length > 0) {
       grouped[gameKey] = filtered.sort((a, b) => a.price - b.price)
